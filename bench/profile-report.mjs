@@ -5,7 +5,13 @@ import { parseArgs } from 'node:util';
 
 const { values: opts, positionals } = parseArgs({
   allowPositionals: true,
-  options: { svg: { type: 'string' }, title: { type: 'string', default: '' }, json: { type: 'string' } },
+  options: {
+    svg: { type: 'string' },
+    title: { type: 'string', default: '' },
+    json: { type: 'string' },
+    // Inclusive time of the stacks containing a frame of these categories (e.g. logging libraries)
+    inclusive: { type: 'string' },
+  },
 });
 const profile = JSON.parse(readFileSync(positionals[0], 'utf8'));
 
@@ -23,7 +29,7 @@ function category(frame) {
   const m = url.match(/node_modules[\\/]((@[^\\/]+[\\/])?[^\\/]+)/);
   if (m) return m[1].replace('\\', '/');
   if (url.startsWith('node:')) return 'node core';
-  if (/[\\/]src[\\/]/.test(url)) return 'app code (src/)';
+  if (/[\\/](src|dist)[\\/]/.test(url)) return 'app code (src/)';
   return 'other';
 }
 
@@ -57,6 +63,23 @@ const summary = {
 };
 
 console.log(`Profile ${positionals[0]}: ${summary.durationMs} ms, CPU busy ${summary.busyPercent}%`);
+
+if (opts.inclusive) {
+  const wanted = new Set(opts.inclusive.split(','));
+  const parent = new Map();
+  for (const n of nodes) for (const c of n.children ?? []) parent.set(c, n.id);
+  const memo = new Map();
+  const inside = (id) => {
+    if (memo.has(id)) return memo.get(id);
+    const n = byId.get(id);
+    const result = wanted.has(category(n.callFrame)) || (parent.has(id) && inside(parent.get(id)));
+    memo.set(id, result);
+    return result;
+  };
+  const time = nodes.filter((n) => inside(n.id)).reduce((a, n) => a + n.self, 0);
+  summary.inclusive = { categories: [...wanted], percentOfBusy: pct(time, busy) };
+  console.log(`Inclusive time under [${[...wanted].join(', ')}]: ${pct(time, busy)}% of busy time`);
+}
 console.log('\nSelf time by category (% of busy time)');
 for (const c of summary.byCategory) console.log(`  ${String(c.percentOfBusy).padStart(5)}%  ${c.category}`);
 console.log('\nTop functions (self time, % of busy time)');

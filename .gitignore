@@ -5,3 +5,4 @@ bench/profiles/*.cpuprofile
 bench/results/*.log
 *.heapsnapshot
 .baseline/
+.versions/

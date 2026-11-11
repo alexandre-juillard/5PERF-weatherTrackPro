@@ -1,42 +1,46 @@
 {
-  "durationMs": 13547,
-  "busyPercent": 99,
+  "durationMs": 9133,
+  "busyPercent": 99.3,
   "byCategory": [
     {
       "category": "dayjs",
-      "percentOfBusy": 59.6
+      "percentOfBusy": 60.2
     },
     {
       "category": "zod",
-      "percentOfBusy": 9.9
-    },
-    {
-      "category": "GC",
-      "percentOfBusy": 7.7
+      "percentOfBusy": 11.5
     },
     {
       "category": "postgres-date",
-      "percentOfBusy": 7.5
+      "percentOfBusy": 7.3
+    },
+    {
+      "category": "GC",
+      "percentOfBusy": 6.1
     },
     {
       "category": "node core",
-      "percentOfBusy": 4.2
+      "percentOfBusy": 4.9
     },
     {
       "category": "V8 / native",
-      "percentOfBusy": 3.9
+      "percentOfBusy": 3.1
     },
     {
       "category": "app code (src/)",
-      "percentOfBusy": 3
+      "percentOfBusy": 2.3
     },
     {
       "category": "pg-protocol",
-      "percentOfBusy": 2
+      "percentOfBusy": 1.9
     },
     {
       "category": "pg",
-      "percentOfBusy": 1.6
+      "percentOfBusy": 1.8
+    },
+    {
+      "category": "morgan",
+      "percentOfBusy": 0.2
     },
     {
       "category": "express",
@@ -44,34 +48,14 @@
     },
     {
       "category": "pg-types",
-      "percentOfBusy": 0.2
-    },
-    {
-      "category": "content-type",
       "percentOfBusy": 0.1
     },
     {
-      "category": "pg-pool",
-      "percentOfBusy": 0
-    },
-    {
-      "category": "morgan",
-      "percentOfBusy": 0
-    },
-    {
-      "category": "logform",
-      "percentOfBusy": 0
-    },
-    {
       "category": "qs",
-      "percentOfBusy": 0
+      "percentOfBusy": 0.1
     },
     {
-      "category": "etag",
-      "percentOfBusy": 0
-    },
-    {
-      "category": "zod-express-middleware",
+      "category": "ee-first",
       "percentOfBusy": 0
     },
     {
@@ -79,7 +63,23 @@
       "percentOfBusy": 0
     },
     {
+      "category": "etag",
+      "percentOfBusy": 0
+    },
+    {
       "category": "readable-stream",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "content-type",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "logform",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "forwarded",
       "percentOfBusy": 0
     },
     {
@@ -87,11 +87,15 @@
       "percentOfBusy": 0
     },
     {
-      "category": "other",
+      "category": "pg-pool",
       "percentOfBusy": 0
     },
     {
-      "category": "ee-first",
+      "category": "body-parser",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "other",
       "percentOfBusy": 0
     },
     {
@@ -103,69 +107,73 @@
       "percentOfBusy": 0
     },
     {
-      "category": "body-parser",
+      "category": "proxy-addr",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "zod-express-middleware",
       "percentOfBusy": 0
     }
   ],
   "topFunctions": [
     {
       "fn": "(anonymous) dayjs/dayjs.min.js:1 [dayjs]",
-      "percentOfBusy": 20.1
+      "percentOfBusy": 20.5
     },
     {
       "fn": "p dayjs/dayjs.min.js:1 [dayjs]",
-      "percentOfBusy": 13.5
+      "percentOfBusy": 14.1
     },
     {
       "fn": "m.init dayjs/dayjs.min.js:1 [dayjs]",
-      "percentOfBusy": 13.2
-    },
-    {
-      "fn": "(garbage collector) :0 [GC]",
-      "percentOfBusy": 7.7
+      "percentOfBusy": 13.5
     },
     {
       "fn": "getDate postgres-date/index.js:60 [postgres-date]",
-      "percentOfBusy": 6.7
+      "percentOfBusy": 6.6
     },
     {
-      "fn": "O dayjs/dayjs.min.js:1 [dayjs]",
-      "percentOfBusy": 4.6
+      "fn": "(garbage collector) :0 [GC]",
+      "percentOfBusy": 6.1
     },
     {
       "fn": "_parse lib/index.mjs:2190 [zod]",
-      "percentOfBusy": 3.1
+      "percentOfBusy": 3.5
+    },
+    {
+      "fn": "O dayjs/dayjs.min.js:1 [dayjs]",
+      "percentOfBusy": 3.4
     },
     {
       "fn": "_parse lib/index.mjs:1324 [zod]",
-      "percentOfBusy": 2.5
+      "percentOfBusy": 3.2
     },
     {
       "fn": "_parse lib/index.mjs:1761 [zod]",
+      "percentOfBusy": 2.6
+    },
+    {
+      "fn": "utf8Slice :0 [V8 / native]",
       "percentOfBusy": 2.4
     },
     {
       "fn": "t dayjs/dayjs.min.js:1 [dayjs]",
-      "percentOfBusy": 2.1
-    },
-    {
-      "fn": "utf8Slice :0 [V8 / native]",
-      "percentOfBusy": 2.1
-    },
-    {
-      "fn": "(anonymous) weather/service.ts:17 [app code (src/)]",
-      "percentOfBusy": 2
+      "percentOfBusy": 2.3
     },
     {
       "fn": "m.isAfter dayjs/dayjs.min.js:1 [dayjs]",
-      "percentOfBusy": 1.9
+      "percentOfBusy": 1.7
     },
     {
       "fn": "slice node:buffer:640 [node core]",
-      "percentOfBusy": 1.6
+      "percentOfBusy": 1.7
     },
     {
       "fn": "m.isSame dayjs/dayjs.min.js:1 [dayjs]",
+      "percentOfBusy": 1.6
+    },
+    {
+      "fn": "(anonymous) weather/service.ts:17 [app code (src/)]",
       "percentOfBusy": 1.5
     }
   ]

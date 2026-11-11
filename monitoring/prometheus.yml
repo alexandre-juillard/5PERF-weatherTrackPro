@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  # API metrics (aggregated over all the cluster workers), served on api:9100
+  - job_name: weathertrack-api
+    static_configs:
+      - targets: ['host.docker.internal:9100']

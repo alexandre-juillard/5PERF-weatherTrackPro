@@ -1,0 +1,152 @@
+{
+  "durationMs": 9178,
+  "busyPercent": 97.2,
+  "byCategory": [
+    {
+      "category": "app code (src/)",
+      "percentOfBusy": 26.3
+    },
+    {
+      "category": "V8 / native",
+      "percentOfBusy": 22.6
+    },
+    {
+      "category": "node core",
+      "percentOfBusy": 19.7
+    },
+    {
+      "category": "pg",
+      "percentOfBusy": 11.4
+    },
+    {
+      "category": "pg-protocol",
+      "percentOfBusy": 9
+    },
+    {
+      "category": "GC",
+      "percentOfBusy": 7.6
+    },
+    {
+      "category": "pg-cursor",
+      "percentOfBusy": 1.2
+    },
+    {
+      "category": "pino",
+      "percentOfBusy": 0.5
+    },
+    {
+      "category": "express",
+      "percentOfBusy": 0.4
+    },
+    {
+      "category": "pino-http",
+      "percentOfBusy": 0.4
+    },
+    {
+      "category": "pg-types",
+      "percentOfBusy": 0.3
+    },
+    {
+      "category": "prom-client",
+      "percentOfBusy": 0.2
+    },
+    {
+      "category": "zod",
+      "percentOfBusy": 0.1
+    },
+    {
+      "category": "pg-pool",
+      "percentOfBusy": 0.1
+    },
+    {
+      "category": "pino-std-serializers",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "sonic-boom",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "body-parser",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "type-is",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "parseurl",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "mime",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "other",
+      "percentOfBusy": 0
+    }
+  ],
+  "topFunctions": [
+    {
+      "fn": "(anonymous) weather/controller.js:47 [app code (src/)]",
+      "percentOfBusy": 25.8
+    },
+    {
+      "fn": "utf8Slice :0 [V8 / native]",
+      "percentOfBusy": 11.6
+    },
+    {
+      "fn": "slice node:buffer:640 [node core]",
+      "percentOfBusy": 9.9
+    },
+    {
+      "fn": "parseRow lib/result.js:63 [pg]",
+      "percentOfBusy": 9.5
+    },
+    {
+      "fn": "(garbage collector) :0 [GC]",
+      "percentOfBusy": 7.6
+    },
+    {
+      "fn": "parseDataRowMessage dist/parser.js:208 [pg-protocol]",
+      "percentOfBusy": 5
+    },
+    {
+      "fn": "writev :0 [V8 / native]",
+      "percentOfBusy": 4.6
+    },
+    {
+      "fn": "writeBuffer :0 [V8 / native]",
+      "percentOfBusy": 3.1
+    },
+    {
+      "fn": "post node:inspector:118 [node core]",
+      "percentOfBusy": 1.9
+    },
+    {
+      "fn": "(anonymous) dist/index.js:11 [pg-protocol]",
+      "percentOfBusy": 1.8
+    },
+    {
+      "fn": "emit node:events:466 [node core]",
+      "percentOfBusy": 1.7
+    },
+    {
+      "fn": "_handleDataRow lib/client.js:365 [pg]",
+      "percentOfBusy": 1.7
+    },
+    {
+      "fn": "(anonymous) :0 [V8 / native]",
+      "percentOfBusy": 1.6
+    },
+    {
+      "fn": "parse dist/parser.js:28 [pg-protocol]",
+      "percentOfBusy": 1.5
+    },
+    {
+      "fn": "(program) :0 [V8 / native]",
+      "percentOfBusy": 1.1
+    }
+  ]
+}

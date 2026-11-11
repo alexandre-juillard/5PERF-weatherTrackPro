@@ -1,0 +1,156 @@
+{
+  "durationMs": 9116,
+  "busyPercent": 95.1,
+  "byCategory": [
+    {
+      "category": "node core",
+      "percentOfBusy": 29.5
+    },
+    {
+      "category": "V8 / native",
+      "percentOfBusy": 24.2
+    },
+    {
+      "category": "express",
+      "percentOfBusy": 14.6
+    },
+    {
+      "category": "pino-http",
+      "percentOfBusy": 9.7
+    },
+    {
+      "category": "pino",
+      "percentOfBusy": 7.1
+    },
+    {
+      "category": "ioredis",
+      "percentOfBusy": 3.2
+    },
+    {
+      "category": "app code (src/)",
+      "percentOfBusy": 2.9
+    },
+    {
+      "category": "GC",
+      "percentOfBusy": 2.4
+    },
+    {
+      "category": "pino-std-serializers",
+      "percentOfBusy": 1.9
+    },
+    {
+      "category": "body-parser",
+      "percentOfBusy": 1.4
+    },
+    {
+      "category": "content-type",
+      "percentOfBusy": 1
+    },
+    {
+      "category": "parseurl",
+      "percentOfBusy": 0.8
+    },
+    {
+      "category": "prom-client",
+      "percentOfBusy": 0.5
+    },
+    {
+      "category": "zod",
+      "percentOfBusy": 0.4
+    },
+    {
+      "category": "type-is",
+      "percentOfBusy": 0.2
+    },
+    {
+      "category": "etag",
+      "percentOfBusy": 0.1
+    },
+    {
+      "category": "sonic-boom",
+      "percentOfBusy": 0.1
+    },
+    {
+      "category": "mime",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "qs",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "other",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "debug",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "quick-format-unescaped",
+      "percentOfBusy": 0
+    }
+  ],
+  "topFunctions": [
+    {
+      "fn": "writeUtf8String :0 [V8 / native]",
+      "percentOfBusy": 12.5
+    },
+    {
+      "fn": "loggingMiddleware pino-http/logger.js:138 [pino-http]",
+      "percentOfBusy": 7.8
+    },
+    {
+      "fn": "writev :0 [V8 / native]",
+      "percentOfBusy": 6.7
+    },
+    {
+      "fn": "(program) :0 [V8 / native]",
+      "percentOfBusy": 2.9
+    },
+    {
+      "fn": "child lib/proto.js:85 [pino]",
+      "percentOfBusy": 2.8
+    },
+    {
+      "fn": "next router/index.js:177 [express]",
+      "percentOfBusy": 2.7
+    },
+    {
+      "fn": "nextTick process/task_queues:111 [node core]",
+      "percentOfBusy": 2.5
+    },
+    {
+      "fn": "(garbage collector) :0 [GC]",
+      "percentOfBusy": 2.4
+    },
+    {
+      "fn": "expressInit middleware/init.js:29 [express]",
+      "percentOfBusy": 2
+    },
+    {
+      "fn": "writeHead node:_http_server:351 [node core]",
+      "percentOfBusy": 1.7
+    },
+    {
+      "fn": "parserOnMessageComplete node:_http_common:143 [node core]",
+      "percentOfBusy": 1.7
+    },
+    {
+      "fn": "reqSerializer lib/req.js:65 [pino-std-serializers]",
+      "percentOfBusy": 1.4
+    },
+    {
+      "fn": "_addListener node:events:547 [node core]",
+      "percentOfBusy": 1.4
+    },
+    {
+      "fn": "jsonParser types/json.js:105 [body-parser]",
+      "percentOfBusy": 1.4
+    },
+    {
+      "fn": "post node:inspector:118 [node core]",
+      "percentOfBusy": 1.2
+    }
+  ]
+}

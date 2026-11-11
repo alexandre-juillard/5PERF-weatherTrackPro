@@ -1,0 +1,64 @@
+{
+  "uid": "weathertrack-api",
+  "title": "WeatherTrack Pro - API",
+  "schemaVersion": 39,
+  "time": { "from": "now-15m", "to": "now" },
+  "refresh": "5s",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Requests / s by route",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "sum by (route) (rate(http_request_duration_seconds_count[1m]))", "legendFormat": "{{route}}" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Latency p95 / p99 (s)",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "targets": [
+        { "expr": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[1m])))", "legendFormat": "p95" },
+        { "expr": "histogram_quantile(0.99, sum by (le) (rate(http_request_duration_seconds_bucket[1m])))", "legendFormat": "p99" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Event loop lag p99 (s)",
+      "gridPos": { "x": 0, "y": 8, "w": 8, "h": 8 },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "targets": [{ "expr": "nodejs_eventloop_lag_p99_seconds", "legendFormat": "p99" }]
+    },
+    {
+      "type": "stat",
+      "title": "Cache hit ratio",
+      "gridPos": { "x": 8, "y": 8, "w": 8, "h": 8 },
+      "fieldConfig": { "defaults": { "unit": "percentunit" } },
+      "targets": [
+        { "expr": "sum(rate(cache_requests_total{result=\"hit\"}[5m])) / sum(rate(cache_requests_total[5m]))" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "PostgreSQL pool connections",
+      "gridPos": { "x": 16, "y": 8, "w": 8, "h": 8 },
+      "targets": [{ "expr": "db_pool_connections", "legendFormat": "{{state}}" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "5xx errors / s",
+      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
+      "targets": [{ "expr": "sum(rate(http_request_duration_seconds_count{status=~\"5..\"}[1m]))", "legendFormat": "5xx" }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Memory (RSS) and CPU",
+      "gridPos": { "x": 12, "y": 16, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "process_resident_memory_bytes / 1024 / 1024", "legendFormat": "RSS MB" },
+        { "expr": "rate(process_cpu_seconds_total[1m]) * 100", "legendFormat": "CPU %" }
+      ]
+    }
+  ]
+}

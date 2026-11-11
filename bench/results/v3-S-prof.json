@@ -1,0 +1,77 @@
+{
+  "label": "v3-S-prof",
+  "api": "v1",
+  "cities": 100,
+  "workers": 1,
+  "connections": 50,
+  "duration": 10,
+  "runs": 1,
+  "date": "2026-11-11T23:13:04.746Z",
+  "node": "v22.23.4",
+  "scenarios": {
+    "hot": {
+      "single": {
+        "rps": 283.2,
+        "latencyMs": {
+          "p50": 3,
+          "p90": 3,
+          "p99": 6,
+          "max": 360,
+          "mean": 2.94
+        },
+        "throughputMBs": 0.21,
+        "total": 1699,
+        "errors": 0,
+        "non2xx": 0
+      },
+      "load": {
+        "rps": 1273.8,
+        "latencyMs": {
+          "p50": 37,
+          "p90": 48,
+          "p99": 68,
+          "max": 196,
+          "mean": 38.8
+        },
+        "throughputMBs": 1,
+        "total": 12738,
+        "errors": 0,
+        "non2xx": 0,
+        "server": {
+          "processes": 1,
+          "cpuPercent": 111.9,
+          "eventLoopDelayP99Ms": 40.6,
+          "eventLoopDelayMaxMs": 115.47,
+          "eventLoopDelayMeanMs": 20.17,
+          "peakRssMb": 299.9,
+          "peakHeapUsedMb": 81.3
+        }
+      },
+      "loadRuns": [
+        {
+          "rps": 1273.8,
+          "latencyMs": {
+            "p50": 37,
+            "p90": 48,
+            "p99": 68,
+            "max": 196,
+            "mean": 38.8
+          },
+          "throughputMBs": 1,
+          "total": 12738,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 111.9,
+            "eventLoopDelayP99Ms": 40.6,
+            "eventLoopDelayMaxMs": 115.47,
+            "eventLoopDelayMeanMs": 20.17,
+            "peakRssMb": 299.9,
+            "peakHeapUsedMb": 81.3
+          }
+        }
+      ]
+    }
+  }
+}

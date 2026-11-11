@@ -21,7 +21,7 @@ export const validate =
       }
     }
     if (errors.length > 0) {
-      res.status(400).json(errors);
+      res.set('Cache-Control', 'no-store').status(400).json(errors);
       return;
     }
     next();

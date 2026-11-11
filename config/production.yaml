@@ -8,3 +8,5 @@ database:
   database: toBeDefinedAtDeployTime
   password: toBeDefinedAtDeployTime
   port: 5432
+cache:
+  redisUrl: toBeDefinedAtDeployTime

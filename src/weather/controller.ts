@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, RequestHandler, Response } from 'express';
+import config from 'config';
 import {
   LocationParamsSchema,
   WeatherDataInput,
@@ -20,7 +21,8 @@ const asyncHandler =
     handler(req, res).catch(next);
   };
 
-const notFound = (res: Response) => res.status(404).json({ error: 'Unknown location' });
+const notFound = (res: Response) =>
+  res.set('Cache-Control', 'no-store').status(404).json({ error: 'Unknown location' });
 
 const waitDrain = (res: Response) =>
   new Promise<void>((resolve) => {
@@ -34,6 +36,14 @@ const waitDrain = (res: Response) =>
   });
 
 const router = express.Router();
+
+// Historical data changes rarely: browsers / CDN may reuse a response for a short time,
+// and the ETag computed by Express allows cheap 304 revalidations.
+const cacheControl = config.get<string>('api.cacheControl');
+router.get('*', (_req, res, next) => {
+  res.set('Cache-Control', cacheControl);
+  next();
+});
 
 router.post(
   '/data',
@@ -57,7 +67,7 @@ router.get(
       res.set('X-Next-Cursor', page.nextCursor);
       res.set('Link', `<${req.baseUrl}${req.path}?${next}>; rel="next"`);
     }
-    res.json(page.rows);
+    res.type('application/json').send(page.body);
   })
 );
 

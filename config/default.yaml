@@ -7,6 +7,13 @@ api:
   pagination:
     defaultLimit: 1000
     maxLimit: 5000
+  cacheControl: 'public, max-age=60'
+cache:
+  enabled: true
+  redisUrl: 'redis://127.0.0.1:6379'
+  # Safety net: entries are invalidated on every write of the location anyway
+  ttlSeconds: 3600
+  commandTimeoutMs: 200
 logLevel: 'debug'
 database:
   user: WeatherTrack

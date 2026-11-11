@@ -1,13 +1,14 @@
-// Creates a database seeded with the synthetic dataset on the legacy schema.
-// Usage: node scripts/seed.mjs <dbName> <cities>
-//   node scripts/seed.mjs weather_s_legacy 100    (~1.1M rows)
-//   node scripts/seed.mjs weather_l_legacy 1000   (~11M rows)
+// Creates a database seeded with the synthetic dataset on the legacy schema,
+// and optionally a copy of it migrated to the new schema (node-pg-migrate).
+// Usage: node scripts/seed.mjs <legacyDb> <cities> [migratedDb]
+//   node scripts/seed.mjs weather_s_legacy 100 weather_s    (~1.1M rows)
+//   node scripts/seed.mjs weather_l_legacy 1000 weather_l   (~11M rows)
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
-const [dbName, cities = '100'] = process.argv.slice(2);
-if (!dbName || !/^[a-z0-9_]+$/.test(dbName)) {
-  console.error('Usage: node scripts/seed.mjs <dbName> <cities>');
+const [dbName, cities = '100', migratedDb] = process.argv.slice(2);
+if (!dbName || !/^[a-z0-9_]+$/.test(dbName) || (migratedDb && !/^[a-z0-9_]+$/.test(migratedDb))) {
+  console.error('Usage: node scripts/seed.mjs <legacyDb> <cities> [migratedDb]');
   process.exit(1);
 }
 
@@ -26,3 +27,15 @@ psql(['-d', dbName, '-c', 'CREATE EXTENSION IF NOT EXISTS pg_stat_statements']);
 const start = Date.now();
 psql(['-d', dbName, '-v', `cities=${Number(cities)}`, '-f', '-'], readFileSync(new URL('./seed-legacy.sql', import.meta.url)));
 console.log(`Seeded ${dbName} (${cities} cities) in ${((Date.now() - start) / 1000).toFixed(1)}s`);
+
+if (migratedDb) {
+  psql(['-d', 'WeatherTrack', '-c', `DROP DATABASE IF EXISTS ${migratedDb} WITH (FORCE)`]);
+  psql(['-d', 'WeatherTrack', '-c', `CREATE DATABASE ${migratedDb} TEMPLATE ${dbName}`]);
+  const migrationStart = Date.now();
+  execFileSync('npx', ['node-pg-migrate', '-m', 'migrations', '--config-value', 'database', 'up'], {
+    stdio: ['ignore', 'ignore', 'inherit'],
+    shell: true,
+    env: { ...process.env, NODE_CONFIG: JSON.stringify({ database: { database: migratedDb } }) },
+  });
+  console.log(`Migrated ${migratedDb} in ${((Date.now() - migrationStart) / 1000).toFixed(1)}s`);
+}

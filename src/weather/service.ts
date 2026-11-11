@@ -13,29 +13,25 @@ export class WeatherService {
   // Returns null when the location is unknown (=> 404). An empty range on a known location
   // returns { count: 0, avg: null, min: null, max: null } instead of crashing.
   async getStats(location: string, range: DateRange): Promise<WeatherStats | null> {
-    const stats = await this.repository.getStats(location, range);
-    if (stats.count === 0 && !(await this.repository.locationExists(location))) {
-      return null;
-    }
-    return stats;
+    const locationId = await this.repository.getLocationId(location);
+    if (locationId === null) return null;
+    return this.repository.getStats(locationId, range);
   }
 
   async getPage(location: string, range: DateRange, limit: number, cursor?: string): Promise<Page | null> {
+    const locationId = await this.repository.getLocationId(location);
+    if (locationId === null) return null;
     // One extra row tells whether a next page exists without a COUNT(*)
-    const rows = await this.repository.getPage(location, range, limit + 1, cursor);
-    if (rows.length === 0 && !(await this.repository.locationExists(location))) {
-      return null;
-    }
+    const rows = await this.repository.getPage(locationId, location, range, limit + 1, cursor);
     const hasMore = rows.length > limit;
     if (hasMore) rows.pop();
     return { rows, nextCursor: hasMore ? rows[rows.length - 1].date : null };
   }
 
   async exportData(location: string, range: DateRange): Promise<AsyncGenerator<WeatherRow[]> | null> {
-    if (!(await this.repository.locationExists(location))) {
-      return null;
-    }
-    return this.repository.streamBatches(location, range);
+    const locationId = await this.repository.getLocationId(location);
+    if (locationId === null) return null;
+    return this.repository.streamBatches(locationId, location, range);
   }
 }
 

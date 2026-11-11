@@ -11,6 +11,7 @@
     "start": "node --experimental-loader ts-node/esm ./src/index.ts",
     "start:watch": "node --inspect --watch --experimental-loader ts-node/esm ./src/index.ts",
     "build": "tsc",
+    "migrate": "node-pg-migrate -m migrations --config-value database",
     "test": "jest"
   },
   "author": "SUPINFO",
@@ -27,6 +28,7 @@
     "eslint": "^8.56.0",
     "jest": "^29.7.0",
     "mitata": "^1.0.34",
+    "node-pg-migrate": "^9.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },

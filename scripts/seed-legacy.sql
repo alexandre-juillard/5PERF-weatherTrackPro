@@ -24,7 +24,8 @@ SELECT
         + (hashtext(c::text || d::text) % 1000) / 100.0)::numeric, 1),
     round((65 + (hashtext(d::text || c::text) % 3000) / 100.0)::numeric, 1)
 FROM generate_series(DATE '1995-01-01', DATE '2024-12-31', INTERVAL '1 day') AS d,
-     LATERAL generate_series(1, :cities) AS c;
+     LATERAL generate_series(1, :cities) AS c
+ORDER BY d, c;
 
 VACUUM ANALYZE weather;
 

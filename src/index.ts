@@ -15,7 +15,12 @@ process.on('uncaughtException', (error) => {
 });
 const port = config.get<number>('api.port');
 
-await WeatherDataRepository.createTable();
+// The schema is managed by migrations (npm run migrate up); only partition upkeep is done here.
+try {
+  await WeatherDataRepository.ensurePartitions();
+} catch (error) {
+  logger.warn('Could not create the yearly partitions', error);
+}
 
 server
   .listen(port, () => {

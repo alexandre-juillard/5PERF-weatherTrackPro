@@ -1,10 +1,23 @@
 api:
   port: 3000
   logFormat: 'tiny'
+  bodyLimit: '2mb'
+  # Maximum number of measures accepted by POST /weather/data in one request
+  maxBatchSize: 5000
+  pagination:
+    defaultLimit: 1000
+    maxLimit: 5000
 logLevel: 'debug'
 database:
   user: WeatherTrack
-  host: localhost
+  host: 127.0.0.1 # not 'localhost': on Windows it resolves to ::1 first, and the Docker Desktop IPv6 proxy adds ~40 ms per query
   database: WeatherTrack
   password: mysecretpassword
   port: 5432
+  application_name: weathertrack-api
+  # Connection pool (per process)
+  max: 10
+  idleTimeoutMillis: 30000
+  connectionTimeoutMillis: 5000
+  # Server-side protection: no query may hold a connection more than 10 s
+  statement_timeout: 10000

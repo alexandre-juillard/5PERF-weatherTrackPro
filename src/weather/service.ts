@@ -1,76 +1,41 @@
-import repositoryInstance, { WeatherDataRepository } from './repository.js';
-import { WeatherData, WeatherFilter } from './dto.js';
-import dayjs from 'dayjs';
+import repositoryInstance, { DateRange, WeatherDataRepository } from './repository.js';
+import { WeatherDataInput, WeatherRow, WeatherStats } from './dto.js';
+
+export type Page = { rows: WeatherRow[]; nextCursor: string | null };
 
 export class WeatherService {
-  private weatherRepository: WeatherDataRepository;
-  constructor() {
-    this.weatherRepository = repositoryInstance;
+  constructor(private readonly repository: WeatherDataRepository = repositoryInstance) {}
+
+  async addData(input: WeatherDataInput): Promise<void> {
+    await this.repository.upsertMany(Array.isArray(input) ? input : [input]);
   }
 
-  async addData(data: WeatherData) {
-    return this.weatherRepository.insertWeatherData(data);
-  }
-
-  async getData(location: string, options: WeatherFilter) {
-    const { from, to } = options;
-    const data = await this.weatherRepository.getWeatherDataByLocation(
-      location
-    );
-    if (data === null) {
+  // Returns null when the location is unknown (=> 404). An empty range on a known location
+  // returns { count: 0, avg: null, min: null, max: null } instead of crashing.
+  async getStats(location: string, range: DateRange): Promise<WeatherStats | null> {
+    const stats = await this.repository.getStats(location, range);
+    if (stats.count === 0 && !(await this.repository.locationExists(location))) {
       return null;
     }
-    return data.filter((datum) => {
-      if (
-        from &&
-        (dayjs(from).isAfter(datum.date) || dayjs(from).isSame(datum.date))
-      ) {
-        return false;
-      }
-      if (to && dayjs(to).isBefore(datum.date)) {
-        return false;
-      }
-      return true;
-    });
+    return stats;
   }
 
-  async getMean(location: string, options: WeatherFilter) {
-    const data = await this.getData(location, options);
-    if (data === null) {
+  async getPage(location: string, range: DateRange, limit: number, cursor?: string): Promise<Page | null> {
+    // One extra row tells whether a next page exists without a COUNT(*)
+    const rows = await this.repository.getPage(location, range, limit + 1, cursor);
+    if (rows.length === 0 && !(await this.repository.locationExists(location))) {
       return null;
     }
-    const mean =
-      data
-        .map((datum) => datum.temperature)
-        .reduce((acc, current) => acc + current, 0.0) / data.length;
-
-    return mean;
+    const hasMore = rows.length > limit;
+    if (hasMore) rows.pop();
+    return { rows, nextCursor: hasMore ? rows[rows.length - 1].date : null };
   }
 
-  async getMax(location: string, options: WeatherFilter) {
-    const data = await this.getData(location, options);
-
-    if (data === null) {
+  async exportData(location: string, range: DateRange): Promise<AsyncGenerator<WeatherRow[]> | null> {
+    if (!(await this.repository.locationExists(location))) {
       return null;
     }
-    const mean = data
-      .map((datum) => datum.temperature)
-      .reduce((acc, current) => Math.max(acc, current), data[0].temperature);
-
-    return mean;
-  }
-
-  async getMin(location: string, options: WeatherFilter) {
-    const data = await this.getData(location, options);
-
-    if (data === null) {
-      return null;
-    }
-    const mean = data
-      .map((datum) => datum.temperature)
-      .reduce((acc, current) => Math.min(acc, current), data[0].temperature);
-
-    return mean;
+    return this.repository.streamBatches(location, range);
   }
 }
 

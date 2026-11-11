@@ -5,6 +5,7 @@
 // Results are written to bench/results/<label>.json
 import autocannon from 'autocannon';
 import { writeFileSync, mkdirSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 
 const { values: args } = parseArgs({
@@ -168,7 +169,7 @@ for (const name of args.scenarios.split(',')) {
       i === 0 && args.profile
         ? fetch(
             `http://127.0.0.1:${monitorPorts[0]}/profile?seconds=${duration - 1}&out=${encodeURIComponent(
-              `${args.profile}/${args.label}-${name}.cpuprofile`
+              `${resolve(args.profile)}/${args.label}-${name}.cpuprofile`
             )}`
           )
         : null;

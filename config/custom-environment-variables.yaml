@@ -1,0 +1,32 @@
+# Environment variables overriding the configuration files (12-factor; secrets never in git)
+api:
+  port:
+    __name: PORT
+    __format: number
+  workers:
+    __name: WORKERS
+    __format: number
+  accessLog:
+    __name: ACCESS_LOG
+    __format: boolean
+logLevel: LOG_LEVEL
+metrics:
+  port:
+    __name: METRICS_PORT
+    __format: number
+database:
+  host: DB_HOST
+  port:
+    __name: DB_PORT
+    __format: number
+  database: DB_NAME
+  user: DB_USER
+  password: DB_PASSWORD
+  max:
+    __name: DB_POOL_MAX
+    __format: number
+cache:
+  enabled:
+    __name: CACHE_ENABLED
+    __format: boolean
+  redisUrl: REDIS_URL

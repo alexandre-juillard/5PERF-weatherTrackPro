@@ -95,7 +95,7 @@ router.get(
       res.end(']');
     } catch (error) {
       // Headers are already sent: abort the connection so the client sees a truncated body.
-      logger.warn('Export interrupted', { location, error: (error as Error).message });
+      logger.warn({ location, err: error }, 'Export interrupted');
       res.destroy(error as Error);
     }
   })

@@ -8,6 +8,7 @@ const cacheConfig = config.get<CacheConfig>('cache');
 export type CacheResult = 'hit' | 'miss' | 'error';
 
 export interface Cache {
+  connect(): Promise<void>;
   // Entries are grouped by location so that a write invalidates all of them in O(1)
   get(location: string, field: string): Promise<string | null>;
   set(location: string, field: string, value: string): Promise<void>;
@@ -32,7 +33,15 @@ export class RedisCache implements Cache {
     this.onResult?.('error');
     if (Date.now() - this.lastErrorLog > 10_000) {
       this.lastErrorLog = Date.now();
-      logger.warn('Cache unavailable, falling back to the database', { error: (error as Error).message });
+      logger.warn({ err: error }, 'Cache unavailable, falling back to the database');
+    }
+  }
+
+  async connect(): Promise<void> {
+    try {
+      await this.redis.connect();
+    } catch (error) {
+      this.failed(error); // the API starts anyway, ioredis keeps retrying in the background
     }
   }
 
@@ -71,6 +80,7 @@ export class RedisCache implements Cache {
 }
 
 export class NoCache implements Cache {
+  async connect() {}
   async get() {
     return null;
   }
@@ -82,6 +92,7 @@ export class NoCache implements Cache {
 export function createCache(): Cache {
   if (!cacheConfig.enabled) return new NoCache();
   const redis = new Redis(cacheConfig.redisUrl, {
+    lazyConnect: true, // connected explicitly at worker startup (not by a simple import)
     // Fail fast instead of queuing commands while Redis is down
     enableOfflineQueue: false,
     maxRetriesPerRequest: 0,

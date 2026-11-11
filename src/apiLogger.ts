@@ -1,17 +1,16 @@
-import morgan, { Options, StreamOptions } from 'morgan';
-import logger from './logger.js';
+import { pinoHttp } from 'pino-http';
 import config from 'config';
+import logger from './logger.js';
 
-const logFormat = config.get<string>('api.logFormat');
-
-const stream: StreamOptions = {
-  write: (log: string) => {
-    logger.info(log.trim());
+// One compact JSON line per request (method, url, status, duration), like the former morgan 'tiny' format.
+const apiLogger = pinoHttp({
+  logger,
+  autoLogging: config.get<boolean>('api.accessLog'),
+  quietReqLogger: true,
+  serializers: {
+    req: (req) => ({ method: req.method, url: req.url }),
+    res: (res) => ({ statusCode: res.statusCode }),
   },
-};
-
-const apiLogger = morgan(logFormat, {
-  stream,
 });
 
 export default apiLogger;

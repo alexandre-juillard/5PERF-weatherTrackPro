@@ -17,7 +17,8 @@ export const validate =
       if (parsed.success) {
         res.locals[key] = parsed.data;
       } else {
-        errors.push({ type: types[key], errors: parsed.error });
+        // Same shape as the former zod-express-middleware responses
+        errors.push({ type: types[key], errors: { issues: parsed.error.issues, name: 'ZodError' } });
       }
     }
     if (errors.length > 0) {

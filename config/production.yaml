@@ -1,6 +1,6 @@
 api:
   port: 80
-  logFormat: 'tiny'
+  workers: 0
 logLevel: 'info'
 database:
   user: toBeDefinedAtDeployTime

@@ -1,19 +1,25 @@
-import winston from 'winston';
+import { pino } from 'pino';
 import config from 'config';
 
-const consoleLTransport = new winston.transports.Console({
-  level: config.get('logLevel'),
-  handleExceptions: true,
-});
+// Asynchronous buffered writes: logging no longer blocks the event loop
+// (synchronous console writes of winston were ~20% of the CPU in the v1 profile).
+const destination = pino.destination({ dest: 1, sync: false, minLength: 4096 });
 
-const logger = winston.createLogger({
-  exitOnError: true,
-  format: winston.format.combine(
-    winston.format.errors({ stack: true }),
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
-  transports: [consoleLTransport],
-});
+const logger = pino(
+  {
+    level: config.get<string>('logLevel'),
+    timestamp: pino.stdTimeFunctions.isoTime,
+  },
+  destination
+);
+
+// To be called before process.exit() so that buffered lines are not lost
+export const flushLogs = () => {
+  try {
+    destination.flushSync();
+  } catch {
+    // destination not ready yet (very early exit)
+  }
+};
 
 export default logger;

@@ -1,0 +1,6 @@
+logLevel: 'silent'
+api:
+  accessLog: false
+database:
+  database: weather_test
+  max: 4

@@ -109,6 +109,8 @@ export class WeatherDataRepository {
     let failure: Error | undefined;
     try {
       for (;;) {
+        // Sequential on purpose: one batch in memory at a time
+        // eslint-disable-next-line no-await-in-loop
         const rows = await cursor.read(batchSize);
         if (rows.length === 0) return;
         yield rows;

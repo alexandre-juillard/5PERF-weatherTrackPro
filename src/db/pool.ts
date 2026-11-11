@@ -14,7 +14,7 @@ export const pool = new pg.Pool(poolConfig);
 
 // An idle client error must not crash the process (default behaviour of pg.Pool).
 pool.on('error', (error) => {
-  logger.error('Unexpected error on idle PostgreSQL client', error);
+  logger.error({ err: error }, 'Unexpected error on idle PostgreSQL client');
 });
 
 export default pool;

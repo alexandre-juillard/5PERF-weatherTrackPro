@@ -1,6 +1,10 @@
 api:
   port: 3000
-  logFormat: 'tiny'
+  # 1 = single process, 0 = one worker per CPU core, N = N workers (see database.max)
+  workers: 1
+  # One log line per request (pino-http)
+  accessLog: true
+  keepAliveTimeoutMs: 65000
   bodyLimit: '2mb'
   # Maximum number of measures accepted by POST /weather/data in one request
   maxBatchSize: 5000
@@ -15,6 +19,9 @@ cache:
   ttlSeconds: 3600
   commandTimeoutMs: 200
 logLevel: 'debug'
+metrics:
+  # Prometheus /metrics, never exposed publicly
+  port: 9100
 database:
   user: WeatherTrack
   host: 127.0.0.1 # not 'localhost': on Windows it resolves to ::1 first, and the Docker Desktop IPv6 proxy adds ~40 ms per query
@@ -22,7 +29,8 @@ database:
   password: mysecretpassword
   port: 5432
   application_name: weathertrack-api
-  # Connection pool (per process)
+  # Connection pool PER PROCESS: workers x max must stay below PostgreSQL max_connections
+  # (use PgBouncer beyond a few instances)
   max: 10
   idleTimeoutMillis: 30000
   connectionTimeoutMillis: 5000

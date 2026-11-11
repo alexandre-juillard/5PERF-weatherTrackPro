@@ -1,0 +1,10 @@
+api:
+  port: 3000
+  logFormat: 'tiny'
+logLevel: 'debug'
+database:
+  user: WeatherTrack
+  host: localhost
+  database: WeatherTrack
+  password: mysecretpassword
+  port: 5432

@@ -1,0 +1,10 @@
+api:
+  port: 80
+  logFormat: 'tiny'
+logLevel: 'info'
+database:
+  user: toBeDefinedAtDeployTime
+  host: toBeDefinedAtDeployTime
+  database: toBeDefinedAtDeployTime
+  password: toBeDefinedAtDeployTime
+  port: 5432

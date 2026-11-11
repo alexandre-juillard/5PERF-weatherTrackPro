@@ -1,0 +1,563 @@
+{
+  "label": "v0-S",
+  "api": "v0",
+  "cities": 100,
+  "workers": 1,
+  "connections": 50,
+  "duration": 10,
+  "runs": 3,
+  "date": "2026-11-11T20:35:37.433Z",
+  "node": "v22.23.4",
+  "scenarios": {
+    "avg-full": {
+      "single": {
+        "rps": 11.2,
+        "latencyMs": {
+          "p50": 83,
+          "p90": 96,
+          "p99": 360,
+          "max": 360,
+          "mean": 89.3
+        },
+        "throughputMBs": 0,
+        "total": 67,
+        "errors": 0,
+        "non2xx": 0
+      },
+      "load": {
+        "rps": 23.3,
+        "latencyMs": {
+          "p50": 1985,
+          "p90": 2095,
+          "p99": 2791,
+          "max": 2855,
+          "mean": 1960.53
+        },
+        "throughputMBs": 0.01,
+        "total": 233,
+        "errors": 0,
+        "non2xx": 0,
+        "server": {
+          "processes": 1,
+          "cpuPercent": 136.4,
+          "eventLoopDelayP99Ms": 458.49,
+          "eventLoopDelayMaxMs": 458.49,
+          "eventLoopDelayMeanMs": 349.37,
+          "peakRssMb": 413.7,
+          "peakHeapUsedMb": 197.5
+        }
+      },
+      "loadRuns": [
+        {
+          "rps": 24.9,
+          "latencyMs": {
+            "p50": 1991,
+            "p90": 2027,
+            "p99": 2040,
+            "max": 2095,
+            "mean": 1822.86
+          },
+          "throughputMBs": 0.01,
+          "total": 249,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 127.6,
+            "eventLoopDelayP99Ms": 442.24,
+            "eventLoopDelayMaxMs": 442.24,
+            "eventLoopDelayMeanMs": 311.74,
+            "peakRssMb": 391.2,
+            "peakHeapUsedMb": 191
+          }
+        },
+        {
+          "rps": 23.3,
+          "latencyMs": {
+            "p50": 1985,
+            "p90": 2095,
+            "p99": 2791,
+            "max": 2855,
+            "mean": 1960.53
+          },
+          "throughputMBs": 0.01,
+          "total": 233,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 136.4,
+            "eventLoopDelayP99Ms": 458.49,
+            "eventLoopDelayMaxMs": 458.49,
+            "eventLoopDelayMeanMs": 349.37,
+            "peakRssMb": 413.7,
+            "peakHeapUsedMb": 197.5
+          }
+        },
+        {
+          "rps": 22.8,
+          "latencyMs": {
+            "p50": 1975,
+            "p90": 2197,
+            "p99": 3035,
+            "max": 3107,
+            "mean": 2002.06
+          },
+          "throughputMBs": 0.01,
+          "total": 228,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 139.5,
+            "eventLoopDelayP99Ms": 443.81,
+            "eventLoopDelayMaxMs": 443.81,
+            "eventLoopDelayMeanMs": 349.74,
+            "peakRssMb": 414,
+            "peakHeapUsedMb": 156.6
+          }
+        }
+      ]
+    },
+    "avg-1y": {
+      "single": {
+        "rps": 5.2,
+        "latencyMs": {
+          "p50": 156,
+          "p90": 194,
+          "p99": 1079,
+          "max": 1079,
+          "mean": 189.97
+        },
+        "throughputMBs": 0,
+        "total": 31,
+        "errors": 0,
+        "non2xx": 0
+      },
+      "load": {
+        "rps": 8.8,
+        "latencyMs": {
+          "p50": 4507,
+          "p90": 5838,
+          "p99": 6714,
+          "max": 6714,
+          "mean": 4051.04
+        },
+        "throughputMBs": 0,
+        "total": 88,
+        "errors": 0,
+        "non2xx": 0,
+        "server": {
+          "processes": 1,
+          "cpuPercent": 107.6,
+          "eventLoopDelayP99Ms": 5582.62,
+          "eventLoopDelayMaxMs": 5582.62,
+          "eventLoopDelayMeanMs": 1263.42,
+          "peakRssMb": 423.3,
+          "peakHeapUsedMb": 225.4
+        }
+      },
+      "loadRuns": [
+        {
+          "rps": 9.3,
+          "latencyMs": {
+            "p50": 4745,
+            "p90": 5048,
+            "p99": 5495,
+            "max": 5495,
+            "mean": 3786.85
+          },
+          "throughputMBs": 0,
+          "total": 93,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 108,
+            "eventLoopDelayP99Ms": 4978.64,
+            "eventLoopDelayMaxMs": 4978.64,
+            "eventLoopDelayMeanMs": 981.96,
+            "peakRssMb": 420.6,
+            "peakHeapUsedMb": 227.8
+          }
+        },
+        {
+          "rps": 6.2,
+          "latencyMs": {
+            "p50": 5396,
+            "p90": 7955,
+            "p99": 9507,
+            "max": 9507,
+            "mean": 5791.86
+          },
+          "throughputMBs": 0,
+          "total": 62,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 111.9,
+            "eventLoopDelayP99Ms": 5502.93,
+            "eventLoopDelayMaxMs": 5502.93,
+            "eventLoopDelayMeanMs": 1274.97,
+            "peakRssMb": 423.3,
+            "peakHeapUsedMb": 234.4
+          }
+        },
+        {
+          "rps": 8.8,
+          "latencyMs": {
+            "p50": 4507,
+            "p90": 5838,
+            "p99": 6714,
+            "max": 6714,
+            "mean": 4051.04
+          },
+          "throughputMBs": 0,
+          "total": 88,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 107.6,
+            "eventLoopDelayP99Ms": 5582.62,
+            "eventLoopDelayMaxMs": 5582.62,
+            "eventLoopDelayMeanMs": 1263.42,
+            "peakRssMb": 423.3,
+            "peakHeapUsedMb": 225.4
+          }
+        }
+      ]
+    },
+    "data-1y": {
+      "single": {
+        "rps": 5,
+        "latencyMs": {
+          "p50": 160,
+          "p90": 191,
+          "p99": 1244,
+          "max": 1244,
+          "mean": 196.04
+        },
+        "throughputMBs": 0.16,
+        "total": 30,
+        "errors": 0,
+        "non2xx": 0
+      },
+      "load": {
+        "rps": 8.2,
+        "latencyMs": {
+          "p50": 4615,
+          "p90": 6364,
+          "p99": 6909,
+          "max": 6909,
+          "mean": 4486.37
+        },
+        "throughputMBs": 0.27,
+        "total": 82,
+        "errors": 0,
+        "non2xx": 0,
+        "server": {
+          "processes": 1,
+          "cpuPercent": 110.3,
+          "eventLoopDelayP99Ms": 5603.59,
+          "eventLoopDelayMaxMs": 5603.59,
+          "eventLoopDelayMeanMs": 1156.14,
+          "peakRssMb": 423.4,
+          "peakHeapUsedMb": 204.2
+        }
+      },
+      "loadRuns": [
+        {
+          "rps": 9.1,
+          "latencyMs": {
+            "p50": 4471,
+            "p90": 5650,
+            "p99": 6536,
+            "max": 6536,
+            "mean": 4063.21
+          },
+          "throughputMBs": 0.3,
+          "total": 91,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 102.9,
+            "eventLoopDelayP99Ms": 5737.81,
+            "eventLoopDelayMaxMs": 5737.81,
+            "eventLoopDelayMeanMs": 1618.6,
+            "peakRssMb": 423.2,
+            "peakHeapUsedMb": 190.7
+          }
+        },
+        {
+          "rps": 8.2,
+          "latencyMs": {
+            "p50": 4615,
+            "p90": 6364,
+            "p99": 6909,
+            "max": 6909,
+            "mean": 4486.37
+          },
+          "throughputMBs": 0.27,
+          "total": 82,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 110.3,
+            "eventLoopDelayP99Ms": 5603.59,
+            "eventLoopDelayMaxMs": 5603.59,
+            "eventLoopDelayMeanMs": 1156.14,
+            "peakRssMb": 423.4,
+            "peakHeapUsedMb": 204.2
+          }
+        },
+        {
+          "rps": 7.4,
+          "latencyMs": {
+            "p50": 5330,
+            "p90": 6585,
+            "p99": 7269,
+            "max": 7269,
+            "mean": 4885.52
+          },
+          "throughputMBs": 0.24,
+          "total": 74,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 107.8,
+            "eventLoopDelayP99Ms": 7230.98,
+            "eventLoopDelayMaxMs": 7230.98,
+            "eventLoopDelayMeanMs": 1888.02,
+            "peakRssMb": 423.4,
+            "peakHeapUsedMb": 159.9
+          }
+        }
+      ]
+    },
+    "data-full": {
+      "single": {
+        "rps": 6,
+        "latencyMs": {
+          "p50": 140,
+          "p90": 216,
+          "p99": 635,
+          "max": 635,
+          "mean": 165.73
+        },
+        "throughputMBs": 5.86,
+        "total": 36,
+        "errors": 0,
+        "non2xx": 0
+      },
+      "load": {
+        "rps": 13.9,
+        "latencyMs": {
+          "p50": 3249,
+          "p90": 3652,
+          "p99": 4239,
+          "max": 4568,
+          "mean": 3039.1
+        },
+        "throughputMBs": 13.57,
+        "total": 139,
+        "errors": 0,
+        "non2xx": 0,
+        "server": {
+          "processes": 1,
+          "cpuPercent": 112.6,
+          "eventLoopDelayP99Ms": 990.9,
+          "eventLoopDelayMaxMs": 990.9,
+          "eventLoopDelayMeanMs": 785.16,
+          "peakRssMb": 426.4,
+          "peakHeapUsedMb": 203
+        }
+      },
+      "loadRuns": [
+        {
+          "rps": 15.2,
+          "latencyMs": {
+            "p50": 3097,
+            "p90": 3569,
+            "p99": 4089,
+            "max": 4159,
+            "mean": 2743.98
+          },
+          "throughputMBs": 14.84,
+          "total": 152,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 118.1,
+            "eventLoopDelayP99Ms": 1580.2,
+            "eventLoopDelayMaxMs": 1580.2,
+            "eventLoopDelayMeanMs": 627.52,
+            "peakRssMb": 426.1,
+            "peakHeapUsedMb": 199.5
+          }
+        },
+        {
+          "rps": 13.9,
+          "latencyMs": {
+            "p50": 3249,
+            "p90": 3652,
+            "p99": 4239,
+            "max": 4568,
+            "mean": 3039.1
+          },
+          "throughputMBs": 13.57,
+          "total": 139,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 112.6,
+            "eventLoopDelayP99Ms": 990.9,
+            "eventLoopDelayMaxMs": 990.9,
+            "eventLoopDelayMeanMs": 785.16,
+            "peakRssMb": 426.4,
+            "peakHeapUsedMb": 203
+          }
+        },
+        {
+          "rps": 12.8,
+          "latencyMs": {
+            "p50": 3321,
+            "p90": 4155,
+            "p99": 4905,
+            "max": 4966,
+            "mean": 3307.54
+          },
+          "throughputMBs": 12.49,
+          "total": 128,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 122.5,
+            "eventLoopDelayP99Ms": 1377.83,
+            "eventLoopDelayMaxMs": 1377.83,
+            "eventLoopDelayMeanMs": 805.52,
+            "peakRssMb": 427.1,
+            "peakHeapUsedMb": 219.6
+          }
+        }
+      ]
+    },
+    "hot": {
+      "single": {
+        "rps": 7.5,
+        "latencyMs": {
+          "p50": 117,
+          "p90": 148,
+          "p99": 714,
+          "max": 714,
+          "mean": 133.03
+        },
+        "throughputMBs": 0.01,
+        "total": 45,
+        "errors": 0,
+        "non2xx": 0
+      },
+      "load": {
+        "rps": 13.8,
+        "latencyMs": {
+          "p50": 3252,
+          "p90": 3850,
+          "p99": 5812,
+          "max": 5929,
+          "mean": 2977.63
+        },
+        "throughputMBs": 0.01,
+        "total": 138,
+        "errors": 0,
+        "non2xx": 0,
+        "server": {
+          "processes": 1,
+          "cpuPercent": 115,
+          "eventLoopDelayP99Ms": 3474.98,
+          "eventLoopDelayMaxMs": 3474.98,
+          "eventLoopDelayMeanMs": 919.75,
+          "peakRssMb": 423.5,
+          "peakHeapUsedMb": 214.8
+        }
+      },
+      "loadRuns": [
+        {
+          "rps": 13.8,
+          "latencyMs": {
+            "p50": 3252,
+            "p90": 3850,
+            "p99": 5812,
+            "max": 5929,
+            "mean": 2977.63
+          },
+          "throughputMBs": 0.01,
+          "total": 138,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 115,
+            "eventLoopDelayP99Ms": 3474.98,
+            "eventLoopDelayMaxMs": 3474.98,
+            "eventLoopDelayMeanMs": 919.75,
+            "peakRssMb": 423.5,
+            "peakHeapUsedMb": 214.8
+          }
+        },
+        {
+          "rps": 13.9,
+          "latencyMs": {
+            "p50": 3375,
+            "p90": 3650,
+            "p99": 6026,
+            "max": 6097,
+            "mean": 2914.52
+          },
+          "throughputMBs": 0.01,
+          "total": 139,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 113.3,
+            "eventLoopDelayP99Ms": 3378.51,
+            "eventLoopDelayMaxMs": 3378.51,
+            "eventLoopDelayMeanMs": 945.74,
+            "peakRssMb": 423.8,
+            "peakHeapUsedMb": 177.6
+          }
+        },
+        {
+          "rps": 11.3,
+          "latencyMs": {
+            "p50": 3463,
+            "p90": 5135,
+            "p99": 5889,
+            "max": 5890,
+            "mean": 3736.31
+          },
+          "throughputMBs": 0.01,
+          "total": 113,
+          "errors": 0,
+          "non2xx": 0,
+          "server": {
+            "processes": 1,
+            "cpuPercent": 115.7,
+            "eventLoopDelayP99Ms": 3229.61,
+            "eventLoopDelayMaxMs": 3229.61,
+            "eventLoopDelayMeanMs": 1377.58,
+            "peakRssMb": 424.5,
+            "peakHeapUsedMb": 199.8
+          }
+        }
+      ]
+    }
+  }
+}

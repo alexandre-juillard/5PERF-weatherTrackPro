@@ -1,0 +1,172 @@
+{
+  "durationMs": 13547,
+  "busyPercent": 99,
+  "byCategory": [
+    {
+      "category": "dayjs",
+      "percentOfBusy": 59.6
+    },
+    {
+      "category": "zod",
+      "percentOfBusy": 9.9
+    },
+    {
+      "category": "GC",
+      "percentOfBusy": 7.7
+    },
+    {
+      "category": "postgres-date",
+      "percentOfBusy": 7.5
+    },
+    {
+      "category": "node core",
+      "percentOfBusy": 4.2
+    },
+    {
+      "category": "V8 / native",
+      "percentOfBusy": 3.9
+    },
+    {
+      "category": "app code (src/)",
+      "percentOfBusy": 3
+    },
+    {
+      "category": "pg-protocol",
+      "percentOfBusy": 2
+    },
+    {
+      "category": "pg",
+      "percentOfBusy": 1.6
+    },
+    {
+      "category": "express",
+      "percentOfBusy": 0.2
+    },
+    {
+      "category": "pg-types",
+      "percentOfBusy": 0.2
+    },
+    {
+      "category": "content-type",
+      "percentOfBusy": 0.1
+    },
+    {
+      "category": "pg-pool",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "morgan",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "logform",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "qs",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "etag",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "zod-express-middleware",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "on-headers",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "readable-stream",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "safe-stable-stringify",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "other",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "ee-first",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "winston",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "winston-transport",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "body-parser",
+      "percentOfBusy": 0
+    }
+  ],
+  "topFunctions": [
+    {
+      "fn": "(anonymous) dayjs/dayjs.min.js:1 [dayjs]",
+      "percentOfBusy": 20.1
+    },
+    {
+      "fn": "p dayjs/dayjs.min.js:1 [dayjs]",
+      "percentOfBusy": 13.5
+    },
+    {
+      "fn": "m.init dayjs/dayjs.min.js:1 [dayjs]",
+      "percentOfBusy": 13.2
+    },
+    {
+      "fn": "(garbage collector) :0 [GC]",
+      "percentOfBusy": 7.7
+    },
+    {
+      "fn": "getDate postgres-date/index.js:60 [postgres-date]",
+      "percentOfBusy": 6.7
+    },
+    {
+      "fn": "O dayjs/dayjs.min.js:1 [dayjs]",
+      "percentOfBusy": 4.6
+    },
+    {
+      "fn": "_parse lib/index.mjs:2190 [zod]",
+      "percentOfBusy": 3.1
+    },
+    {
+      "fn": "_parse lib/index.mjs:1324 [zod]",
+      "percentOfBusy": 2.5
+    },
+    {
+      "fn": "_parse lib/index.mjs:1761 [zod]",
+      "percentOfBusy": 2.4
+    },
+    {
+      "fn": "t dayjs/dayjs.min.js:1 [dayjs]",
+      "percentOfBusy": 2.1
+    },
+    {
+      "fn": "utf8Slice :0 [V8 / native]",
+      "percentOfBusy": 2.1
+    },
+    {
+      "fn": "(anonymous) weather/service.ts:17 [app code (src/)]",
+      "percentOfBusy": 2
+    },
+    {
+      "fn": "m.isAfter dayjs/dayjs.min.js:1 [dayjs]",
+      "percentOfBusy": 1.9
+    },
+    {
+      "fn": "slice node:buffer:640 [node core]",
+      "percentOfBusy": 1.6
+    },
+    {
+      "fn": "m.isSame dayjs/dayjs.min.js:1 [dayjs]",
+      "percentOfBusy": 1.5
+    }
+  ]
+}

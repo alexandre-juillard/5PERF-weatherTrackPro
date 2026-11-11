@@ -1,0 +1,176 @@
+{
+  "durationMs": 9413,
+  "busyPercent": 97.6,
+  "byCategory": [
+    {
+      "category": "zod",
+      "percentOfBusy": 30.2
+    },
+    {
+      "category": "postgres-date",
+      "percentOfBusy": 19.9
+    },
+    {
+      "category": "GC",
+      "percentOfBusy": 14.7
+    },
+    {
+      "category": "node core",
+      "percentOfBusy": 11.6
+    },
+    {
+      "category": "V8 / native",
+      "percentOfBusy": 8.4
+    },
+    {
+      "category": "pg-protocol",
+      "percentOfBusy": 5.8
+    },
+    {
+      "category": "pg",
+      "percentOfBusy": 3.9
+    },
+    {
+      "category": "app code (src/)",
+      "percentOfBusy": 3.6
+    },
+    {
+      "category": "express",
+      "percentOfBusy": 0.6
+    },
+    {
+      "category": "pg-types",
+      "percentOfBusy": 0.4
+    },
+    {
+      "category": "morgan",
+      "percentOfBusy": 0.3
+    },
+    {
+      "category": "content-type",
+      "percentOfBusy": 0.1
+    },
+    {
+      "category": "pg-pool",
+      "percentOfBusy": 0.1
+    },
+    {
+      "category": "readable-stream",
+      "percentOfBusy": 0.1
+    },
+    {
+      "category": "on-headers",
+      "percentOfBusy": 0.1
+    },
+    {
+      "category": "ee-first",
+      "percentOfBusy": 0.1
+    },
+    {
+      "category": "safe-stable-stringify",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "logform",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "forwarded",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "etag",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "body-parser",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "winston",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "parseurl",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "zod-express-middleware",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "other",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "winston-transport",
+      "percentOfBusy": 0
+    },
+    {
+      "category": "proxy-addr",
+      "percentOfBusy": 0
+    }
+  ],
+  "topFunctions": [
+    {
+      "fn": "getDate postgres-date/index.js:60 [postgres-date]",
+      "percentOfBusy": 17.4
+    },
+    {
+      "fn": "(garbage collector) :0 [GC]",
+      "percentOfBusy": 14.7
+    },
+    {
+      "fn": "_parse lib/index.mjs:2190 [zod]",
+      "percentOfBusy": 9.7
+    },
+    {
+      "fn": "_parse lib/index.mjs:1324 [zod]",
+      "percentOfBusy": 7.5
+    },
+    {
+      "fn": "_parse lib/index.mjs:1761 [zod]",
+      "percentOfBusy": 6.9
+    },
+    {
+      "fn": "utf8Slice :0 [V8 / native]",
+      "percentOfBusy": 6.3
+    },
+    {
+      "fn": "slice node:buffer:640 [node core]",
+      "percentOfBusy": 5.1
+    },
+    {
+      "fn": "parseDataRowMessage dist/parser.js:208 [pg-protocol]",
+      "percentOfBusy": 2.8
+    },
+    {
+      "fn": "parseDate postgres-date/index.js:8 [postgres-date]",
+      "percentOfBusy": 2.6
+    },
+    {
+      "fn": "_parseSync lib/index.mjs:623 [zod]",
+      "percentOfBusy": 1.9
+    },
+    {
+      "fn": "parseRow lib/result.js:63 [pg]",
+      "percentOfBusy": 1.9
+    },
+    {
+      "fn": "mergeObjectSync lib/index.mjs:469 [zod]",
+      "percentOfBusy": 1.8
+    },
+    {
+      "fn": "post node:inspector:118 [node core]",
+      "percentOfBusy": 1.5
+    },
+    {
+      "fn": "emit node:events:466 [node core]",
+      "percentOfBusy": 1.4
+    },
+    {
+      "fn": "(anonymous) dist/index.js:11 [pg-protocol]",
+      "percentOfBusy": 1.3
+    }
+  ]
+}

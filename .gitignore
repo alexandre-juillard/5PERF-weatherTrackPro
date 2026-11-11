@@ -1,3 +1,7 @@
 node_modules
 dist
 config/local-*.*
+bench/profiles/*.cpuprofile
+bench/results/*.log
+*.heapsnapshot
+.baseline/

@@ -1,0 +1,312 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1461" font-family="monospace" font-size="11">
+<rect width="100%" height="100%" fill="#fff"/><text x="10" y="15" font-size="13" font-weight="bold">AVANT (v0) - data-full - charge 50 connexions (icicle: root at top, width = inclusive CPU time, idle excluded)</text><rect x="10" y="22" width="12" height="12" fill="#c4a1d6"/><text x="26" y="32">express 39.7%</text><rect x="180" y="22" width="12" height="12" fill="#a8c686"/><text x="196" y="32">zod 16.1%</text><rect x="350" y="22" width="12" height="12" fill="#ece2d0"/><text x="366" y="32">postgres-date 12.6%</text><rect x="520" y="22" width="12" height="12" fill="#7d7d7d"/><text x="536" y="32">GC 9.1%</text><rect x="690" y="22" width="12" height="12" fill="#bbbbbb"/><text x="706" y="32">node core 7.3%</text><rect x="860" y="22" width="12" height="12" fill="#d9d9d9"/><text x="876" y="32">V8 / native 6.8%</text><rect x="1030" y="22" width="12" height="12" fill="#4f86b0"/><text x="1046" y="32">pg-protocol 3.6%</text><rect x="1200" y="22" width="12" height="12" fill="#669bbc"/><text x="1216" y="32">pg 2.5%</text>
+<g><title>all [root] 100%</title><rect x="0.0" y="50" width="1400.0" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="3.0" y="62">all</text></g>
+<g><title>processTicksAndRejections [node core] 62.1%</title><rect x="0.0" y="67" width="869.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="3.0" y="79">processTicksAndRejections</text></g>
+<g><title>runMicrotasks [V8 / native] 59.5%</title><rect x="0.0" y="84" width="833.0" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="3.0" y="96">runMicrotasks</text></g>
+<g><title>(anonymous) (src) [app code (src/)] 42.2%</title><rect x="0.0" y="101" width="590.4" height="16" fill="#e4572e" stroke="#fff" stroke-width="0.3"/><text x="3.0" y="113">(anonymous) (src)</text></g>
+<g><title>json [express] 42.1%</title><rect x="0.0" y="118" width="590.0" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="3.0" y="130">json</text></g>
+<g><title>stringify [express] 39.2%</title><rect x="0.0" y="135" width="548.9" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="3.0" y="147">stringify</text></g>
+<g><title>send [express] 2.8%</title><rect x="548.9" y="135" width="39.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="551.9" y="147"></text></g>
+<g><title>generateETag [express] 1.1%</title><rect x="548.9" y="152" width="14.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="551.9" y="164"></text></g>
+<g><title>etag [etag] 1.1%</title><rect x="548.9" y="169" width="14.8" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="551.9" y="181"></text></g>
+<g><title>entitytag [etag] 1%</title><rect x="548.9" y="186" width="14.6" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="551.9" y="198"></text></g>
+<g><title>update [node core] 0.9%</title><rect x="548.9" y="203" width="13.2" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="551.9" y="215"></text></g>
+<g><title>update [V8 / native] 0.9%</title><rect x="548.9" y="220" width="13.2" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="551.9" y="232"></text></g>
+<g><title>createHash [node core] 0.1%</title><rect x="562.1" y="203" width="0.8" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="565.1" y="215"></text></g>
+<g><title>Hash [node core] 0.1%</title><rect x="562.1" y="220" width="0.8" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="565.1" y="232"></text></g>
+<g><title>end [node core] 1%</title><rect x="563.6" y="152" width="14.1" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="566.6" y="164"></text></g>
+<g><title>Writable.uncork [node core] 0.7%</title><rect x="563.6" y="169" width="10.3" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="566.6" y="181"></text></g>
+<g><title>clearBuffer [node core] 0.7%</title><rect x="563.6" y="186" width="10.2" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="566.6" y="198"></text></g>
+<g><title>doWrite [node core] 0.7%</title><rect x="563.6" y="203" width="10.2" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="566.6" y="215"></text></g>
+<g><title>Socket._writev [node core] 0.7%</title><rect x="563.6" y="220" width="10.2" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="566.6" y="232"></text></g>
+<g><title>Socket._writeGeneric [node core] 0.7%</title><rect x="563.6" y="237" width="10.2" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="566.6" y="249"></text></g>
+<g><title>writevGeneric [node core] 0.7%</title><rect x="563.6" y="254" width="9.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="566.6" y="266"></text></g>
+<g><title>writev [V8 / native] 0.7%</title><rect x="563.6" y="271" width="9.2" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="566.6" y="283"></text></g>
+<g><title>write_ [node core] 0.2%</title><rect x="573.9" y="169" width="3.1" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="576.9" y="181"></text></g>
+<g><title>_send [node core] 0.1%</title><rect x="573.9" y="186" width="2.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="576.9" y="198"></text></g>
+<g><title>_writeRaw [node core] 0.1%</title><rect x="573.9" y="203" width="1.7" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="576.9" y="215"></text></g>
+<g><title>_flushOutput [node core] 0%</title><rect x="573.9" y="220" width="0.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="576.9" y="232"></text></g>
+<g><title>Writable.write [node core] 0%</title><rect x="573.9" y="237" width="0.5" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="576.9" y="249"></text></g>
+<g><title>_implicitHeader [node core] 0.1%</title><rect x="575.9" y="186" width="1.1" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="578.9" y="198"></text></g>
+<g><title>writeHead [on-headers] 0.1%</title><rect x="575.9" y="203" width="1.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="578.9" y="215"></text></g>
+<g><title>writeHead [node core] 0.1%</title><rect x="575.9" y="220" width="0.7" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="578.9" y="232"></text></g>
+<g><title>_storeHeader [node core] 0%</title><rect x="575.9" y="237" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="578.9" y="249"></text></g>
+<g><title>from [node core] 0.4%</title><rect x="577.7" y="152" width="5.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="580.7" y="164"></text></g>
+<g><title>fromString [node core] 0.4%</title><rect x="577.7" y="169" width="5.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="580.7" y="181"></text></g>
+<g><title>fromStringFast [node core] 0.4%</title><rect x="577.7" y="186" width="5.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="580.7" y="198"></text></g>
+<g><title>createFromString [node core] 0.4%</title><rect x="577.7" y="203" width="5.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="580.7" y="215"></text></g>
+<g><title>(anonymous) [V8 / native] 0.2%</title><rect x="577.7" y="220" width="3.0" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="580.7" y="232"></text></g>
+<g><title>write [node core] 0.2%</title><rect x="580.8" y="220" width="2.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="583.8" y="232"></text></g>
+<g><title>utf8Write [node core] 0.2%</title><rect x="580.8" y="237" width="2.2" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="583.8" y="249"></text></g>
+<g><title>(anonymous) [V8 / native] 0.1%</title><rect x="580.8" y="254" width="1.4" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="583.8" y="266"></text></g>
+<g><title>setCharset [express] 0.1%</title><rect x="583.4" y="152" width="1.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="586.4" y="164"></text></g>
+<g><title>parse [content-type] 0.1%</title><rect x="583.4" y="169" width="0.9" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="586.4" y="181"></text></g>
+<g><title>format [content-type] 0%</title><rect x="584.3" y="169" width="0.6" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="587.3" y="181"></text></g>
+<g><title>(anonymous) [express] 0.1%</title><rect x="584.9" y="152" width="1.0" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="587.9" y="164"></text></g>
+<g><title>header [express] 0.1%</title><rect x="585.9" y="152" width="0.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="588.9" y="164"></text></g>
+<g><title>setHeader [node core] 0%</title><rect x="585.9" y="169" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="588.9" y="181"></text></g>
+<g><title>header [express] 0%</title><rect x="588.4" y="135" width="0.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="591.4" y="147"></text></g>
+<g><title>getWeatherDataByLocation (src) [app code (src/)] 17.1%</title><rect x="590.4" y="101" width="238.9" height="16" fill="#e4572e" stroke="#fff" stroke-width="0.3"/><text x="593.4" y="113">getWeatherDataByLocation (src)</text></g>
+<g><title>(anonymous) (src) [app code (src/)] 16.6%</title><rect x="590.4" y="118" width="231.9" height="16" fill="#e4572e" stroke="#fff" stroke-width="0.3"/><text x="593.4" y="130">(anonymous) (src)</text></g>
+<g><title>parse [zod] 16%</title><rect x="590.4" y="135" width="223.8" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="593.4" y="147">parse</text></g>
+<g><title>safeParse [zod] 16%</title><rect x="590.4" y="152" width="223.8" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="593.4" y="164">safeParse</text></g>
+<g><title>_parseSync [zod] 15.9%</title><rect x="590.4" y="169" width="222.0" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="593.4" y="181">_parseSync</text></g>
+<g><title>_parse [zod] 14.9%</title><rect x="590.4" y="186" width="209.0" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="593.4" y="198">_parse</text></g>
+<g><title>_parse [zod] 8%</title><rect x="590.4" y="203" width="111.4" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="593.4" y="215">_parse</text></g>
+<g><title>_getType [zod] 0.1%</title><rect x="590.4" y="220" width="1.9" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="593.4" y="232"></text></g>
+<g><title>getParsedType [zod] 0.1%</title><rect x="590.4" y="237" width="1.9" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="593.4" y="249"></text></g>
+<g><title>mergeObjectSync [zod] 1.1%</title><rect x="701.8" y="203" width="14.7" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="704.8" y="215"></text></g>
+<g><title>_processInputParams [zod] 0.5%</title><rect x="716.5" y="203" width="6.9" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="719.5" y="215"></text></g>
+<g><title>getParsedType [zod] 0.1%</title><rect x="716.5" y="220" width="1.3" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="719.5" y="232"></text></g>
+<g><title>_getType [zod] 0.3%</title><rect x="723.4" y="203" width="4.3" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="726.4" y="215"></text></g>
+<g><title>getParsedType [zod] 0.2%</title><rect x="723.4" y="220" width="3.2" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="726.4" y="232"></text></g>
+<g><title>getParsedType [zod] 0.1%</title><rect x="799.4" y="186" width="0.9" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="802.4" y="198"></text></g>
+<g><title>_processInputParams [zod] 0%</title><rect x="800.3" y="186" width="0.5" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="803.3" y="198"></text></g>
+<g><title>getParsedType [zod] 0.1%</title><rect x="812.4" y="169" width="1.6" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="815.4" y="181"></text></g>
+<g><title>_parse [zod] 0.1%</title><rect x="822.2" y="118" width="0.9" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="825.2" y="130"></text></g>
+<g><title>getData (src) [app code (src/)] 0.2%</title><rect x="829.2" y="101" width="3.3" height="16" fill="#e4572e" stroke="#fff" stroke-width="0.3"/><text x="832.2" y="113"></text></g>
+<g><title>(anonymous) (src) [app code (src/)] 0.1%</title><rect x="829.2" y="118" width="0.9" height="16" fill="#e4572e" stroke="#fff" stroke-width="0.3"/><text x="832.2" y="130"></text></g>
+<g><title>(anonymous) [other] 1.6%</title><rect x="833.0" y="84" width="23.0" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="836.0" y="96"></text></g>
+<g><title>fn [node core] 1.6%</title><rect x="833.0" y="101" width="23.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="836.0" y="113"></text></g>
+<g><title>(anonymous) [node core] 1.6%</title><rect x="833.0" y="118" width="23.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="836.0" y="130"></text></g>
+<g><title>post [node core] 1.6%</title><rect x="833.0" y="135" width="23.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="836.0" y="147"></text></g>
+<g><title>afterWriteTick [node core] 0.8%</title><rect x="855.9" y="84" width="10.8" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="96"></text></g>
+<g><title>afterWrite [node core] 0.8%</title><rect x="855.9" y="101" width="10.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="113"></text></g>
+<g><title>callback [node core] 0.8%</title><rect x="855.9" y="118" width="10.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="130"></text></g>
+<g><title>onFinish [node core] 0.8%</title><rect x="855.9" y="135" width="10.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="147"></text></g>
+<g><title>emit [node core] 0.8%</title><rect x="855.9" y="152" width="10.5" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="164"></text></g>
+<g><title>onevent [ee-first] 0.6%</title><rect x="855.9" y="169" width="8.5" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="181"></text></g>
+<g><title>callback [ee-first] 0.6%</title><rect x="855.9" y="186" width="8.3" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="198"></text></g>
+<g><title>onFinish [morgan] 0.6%</title><rect x="855.9" y="203" width="8.3" height="16" fill="#9bc1bc" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="215"></text></g>
+<g><title>listener [morgan] 0.6%</title><rect x="855.9" y="220" width="8.3" height="16" fill="#9bc1bc" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="232"></text></g>
+<g><title>logRequest [morgan] 0.6%</title><rect x="855.9" y="237" width="8.3" height="16" fill="#9bc1bc" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="249"></text></g>
+<g><title>write (src) [app code (src/)] 0.5%</title><rect x="855.9" y="254" width="7.4" height="16" fill="#e4572e" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="266"></text></g>
+<g><title>DerivedLogger.&lt;computed&gt; [winston] 0.5%</title><rect x="855.9" y="271" width="7.3" height="16" fill="#9bc1bc" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="283"></text></g>
+<g><title>Writable.write [readable-stream] 0.5%</title><rect x="855.9" y="288" width="7.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="300"></text></g>
+<g><title>writeOrBuffer [readable-stream] 0.5%</title><rect x="855.9" y="305" width="7.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="317"></text></g>
+<g><title>doWrite [readable-stream] 0.5%</title><rect x="855.9" y="322" width="7.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="334"></text></g>
+<g><title>Transform._write [readable-stream] 0.5%</title><rect x="855.9" y="339" width="7.0" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="351"></text></g>
+<g><title>Transform._read [readable-stream] 0.5%</title><rect x="855.9" y="356" width="7.0" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="368"></text></g>
+<g><title>_transform [winston] 0.5%</title><rect x="855.9" y="373" width="6.8" height="16" fill="#9bc1bc" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="385"></text></g>
+<g><title>Transform.push [readable-stream] 0.4%</title><rect x="855.9" y="390" width="5.5" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="402"></text></g>
+<g><title>Readable.push [readable-stream] 0.4%</title><rect x="855.9" y="407" width="5.5" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="419"></text></g>
+<g><title>readableAddChunk [readable-stream] 0.4%</title><rect x="855.9" y="424" width="5.4" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="436"></text></g>
+<g><title>addChunk [readable-stream] 0.4%</title><rect x="855.9" y="441" width="5.2" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="453"></text></g>
+<g><title>emit [node core] 0.4%</title><rect x="855.9" y="458" width="5.1" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="470"></text></g>
+<g><title>ondata [readable-stream] 0.4%</title><rect x="855.9" y="475" width="5.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="487"></text></g>
+<g><title>Writable.write [readable-stream] 0.4%</title><rect x="855.9" y="492" width="5.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="504"></text></g>
+<g><title>writeOrBuffer [readable-stream] 0.4%</title><rect x="855.9" y="509" width="5.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="521"></text></g>
+<g><title>doWrite [readable-stream] 0.4%</title><rect x="855.9" y="526" width="5.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="538"></text></g>
+<g><title>_write [winston-transport] 0.4%</title><rect x="855.9" y="543" width="5.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="555"></text></g>
+<g><title>log [winston] 0.4%</title><rect x="855.9" y="560" width="5.0" height="16" fill="#9bc1bc" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="572"></text></g>
+<g><title>Writable.write [node core] 0.3%</title><rect x="855.9" y="577" width="4.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="589"></text></g>
+<g><title>_write [node core] 0.3%</title><rect x="855.9" y="594" width="4.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="606"></text></g>
+<g><title>writeOrBuffer [node core] 0.3%</title><rect x="855.9" y="611" width="4.8" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="623"></text></g>
+<g><title>SyncWriteStream._write [node core] 0.3%</title><rect x="855.9" y="628" width="4.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="640"></text></g>
+<g><title>writeSync [node core] 0.3%</title><rect x="855.9" y="645" width="4.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="657"></text></g>
+<g><title>writeBuffer [V8 / native] 0.3%</title><rect x="855.9" y="662" width="4.6" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="858.9" y="674"></text></g>
+<g><title>(anonymous) [logform] 0.1%</title><rect x="861.4" y="390" width="1.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="864.4" y="402"></text></g>
+<g><title>(anonymous) [logform] 0%</title><rect x="861.4" y="407" width="0.5" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="864.4" y="419"></text></g>
+<g><title>(anonymous) [V8 / native] 0.1%</title><rect x="863.3" y="254" width="0.9" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="866.3" y="266"></text></g>
+<g><title>resOnFinish [node core] 0.1%</title><rect x="864.4" y="169" width="2.1" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="867.4" y="181"></text></g>
+<g><title>_dump [node core] 0%</title><rect x="864.4" y="186" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="867.4" y="198"></text></g>
+<g><title>endReadableNT [node core] 0.1%</title><rect x="866.7" y="84" width="0.7" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="869.7" y="96"></text></g>
+<g><title>(anonymous) [pg-pool] 0%</title><rect x="867.4" y="84" width="0.5" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="870.4" y="96"></text></g>
+<g><title>_pulseQueue [pg-pool] 0%</title><rect x="867.4" y="101" width="0.5" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="870.4" y="113"></text></g>
+<g><title>_acquireClient [pg-pool] 0%</title><rect x="867.4" y="118" width="0.5" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="870.4" y="130"></text></g>
+<g><title>(anonymous) [pg-pool] 0%</title><rect x="867.4" y="135" width="0.5" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="870.4" y="147"></text></g>
+<g><title>query [pg] 0%</title><rect x="867.4" y="152" width="0.5" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="870.4" y="164"></text></g>
+<g><title>_pulseQueryQueue [pg] 0%</title><rect x="867.4" y="169" width="0.5" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="870.4" y="181"></text></g>
+<g><title>submit [pg] 0%</title><rect x="867.4" y="186" width="0.5" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="870.4" y="198"></text></g>
+<g><title>prepare [pg] 0%</title><rect x="867.4" y="203" width="0.5" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="870.4" y="215"></text></g>
+<g><title>maybeReadMore_ [node core] 0%</title><rect x="867.9" y="84" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="870.9" y="96"></text></g>
+<g><title>Socket.read [node core] 0%</title><rect x="867.9" y="101" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="870.9" y="113"></text></g>
+<g><title>onStreamRead [node core] 28%</title><rect x="869.9" y="67" width="392.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="79">onStreamRead</text></g>
+<g><title>Readable.push [node core] 28%</title><rect x="869.9" y="84" width="391.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="96">Readable.push</text></g>
+<g><title>readableAddChunkPushByteMode [node core] 28%</title><rect x="869.9" y="101" width="391.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="113">readableAddChunkPushByteMode</text></g>
+<g><title>addChunk [node core] 28%</title><rect x="869.9" y="118" width="391.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="130">addChunk</text></g>
+<g><title>emit [node core] 27.8%</title><rect x="869.9" y="135" width="389.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="147">emit</text></g>
+<g><title>(anonymous) [pg-protocol] 27.8%</title><rect x="869.9" y="152" width="389.1" height="16" fill="#4f86b0" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="164">(anonymous)</text></g>
+<g><title>parse [pg-protocol] 26.9%</title><rect x="869.9" y="169" width="376.2" height="16" fill="#4f86b0" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="181">parse</text></g>
+<g><title>(anonymous) [pg] 16.9%</title><rect x="869.9" y="186" width="236.3" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="198">(anonymous)</text></g>
+<g><title>emit [node core] 16.9%</title><rect x="869.9" y="203" width="236.3" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="215">emit</text></g>
+<g><title>_handleDataRow [pg] 15.1%</title><rect x="869.9" y="220" width="211.4" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="232">_handleDataRow</text></g>
+<g><title>handleDataRow [pg] 14.3%</title><rect x="869.9" y="237" width="200.0" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="249">handleDataRow</text></g>
+<g><title>parseRow [pg] 13.9%</title><rect x="869.9" y="254" width="194.9" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="266">parseRow</text></g>
+<g><title>parseDate [postgres-date] 12.5%</title><rect x="869.9" y="271" width="175.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="283">parseDate</text></g>
+<g><title>getDate [postgres-date] 11.1%</title><rect x="869.9" y="288" width="154.8" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="872.9" y="300">getDate</text></g>
+<g><title>noParse [pg-types] 0.2%</title><rect x="1045.0" y="271" width="2.9" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1048.0" y="283"></text></g>
+<g><title>addRow [pg] 0.3%</title><rect x="1064.7" y="254" width="4.6" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1067.7" y="266"></text></g>
+<g><title>emit [node core] 0%</title><rect x="1069.3" y="254" width="0.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1072.3" y="266"></text></g>
+<g><title>_handleReadyForQuery [pg] 0.6%</title><rect x="1081.3" y="220" width="9.1" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="232"></text></g>
+<g><title>handleReadyForQuery [pg] 0.6%</title><rect x="1081.3" y="237" width="9.1" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="249"></text></g>
+<g><title>(anonymous) [pg-pool] 0.6%</title><rect x="1081.3" y="254" width="9.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="266"></text></g>
+<g><title>(anonymous) [pg-pool] 0.6%</title><rect x="1081.3" y="271" width="8.8" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="283"></text></g>
+<g><title>_release [pg-pool] 0.6%</title><rect x="1081.3" y="288" width="8.8" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="300"></text></g>
+<g><title>_pulseQueue [pg-pool] 0.5%</title><rect x="1081.3" y="305" width="7.6" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="317"></text></g>
+<g><title>_acquireClient [pg-pool] 0.5%</title><rect x="1081.3" y="322" width="6.9" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="334"></text></g>
+<g><title>(anonymous) [pg-pool] 0.5%</title><rect x="1081.3" y="339" width="6.7" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="351"></text></g>
+<g><title>query [pg] 0.5%</title><rect x="1081.3" y="356" width="6.7" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="368"></text></g>
+<g><title>_pulseQueryQueue [pg] 0.4%</title><rect x="1081.3" y="373" width="6.1" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="385"></text></g>
+<g><title>submit [pg] 0.4%</title><rect x="1081.3" y="390" width="6.1" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="402"></text></g>
+<g><title>prepare [pg] 0.4%</title><rect x="1081.3" y="407" width="6.1" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="419"></text></g>
+<g><title>parse [pg] 0.2%</title><rect x="1081.3" y="424" width="3.5" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="436"></text></g>
+<g><title>_send [pg] 0.2%</title><rect x="1081.3" y="441" width="3.0" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="453"></text></g>
+<g><title>Writable.write [node core] 0.2%</title><rect x="1081.3" y="458" width="3.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="470"></text></g>
+<g><title>_write [node core] 0.2%</title><rect x="1081.3" y="475" width="2.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="487"></text></g>
+<g><title>writeOrBuffer [node core] 0.2%</title><rect x="1081.3" y="492" width="2.8" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="504"></text></g>
+<g><title>Socket._write [node core] 0.2%</title><rect x="1081.3" y="509" width="2.8" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="521"></text></g>
+<g><title>Socket._writeGeneric [node core] 0.2%</title><rect x="1081.3" y="526" width="2.8" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="538"></text></g>
+<g><title>writeGeneric [node core] 0.2%</title><rect x="1081.3" y="543" width="2.8" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="555"></text></g>
+<g><title>handleWriteReq [node core] 0.2%</title><rect x="1081.3" y="560" width="2.3" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="572"></text></g>
+<g><title>writeBuffer [V8 / native] 0.2%</title><rect x="1081.3" y="577" width="2.3" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="1084.3" y="589"></text></g>
+<g><title>_getRows [pg] 0.1%</title><rect x="1084.8" y="424" width="1.9" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="436"></text></g>
+<g><title>sync [pg] 0.1%</title><rect x="1084.8" y="441" width="1.0" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="453"></text></g>
+<g><title>_send [pg] 0.1%</title><rect x="1084.8" y="458" width="1.0" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="470"></text></g>
+<g><title>Writable.write [node core] 0.1%</title><rect x="1084.8" y="475" width="1.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="487"></text></g>
+<g><title>_write [node core] 0.1%</title><rect x="1084.8" y="492" width="1.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="504"></text></g>
+<g><title>writeOrBuffer [node core] 0.1%</title><rect x="1084.8" y="509" width="1.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="521"></text></g>
+<g><title>Socket._write [node core] 0.1%</title><rect x="1084.8" y="526" width="1.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="538"></text></g>
+<g><title>Socket._writeGeneric [node core] 0.1%</title><rect x="1084.8" y="543" width="1.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="555"></text></g>
+<g><title>writeGeneric [node core] 0.1%</title><rect x="1084.8" y="560" width="1.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="572"></text></g>
+<g><title>handleWriteReq [node core] 0.1%</title><rect x="1084.8" y="577" width="1.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="589"></text></g>
+<g><title>writeBuffer [V8 / native] 0.1%</title><rect x="1084.8" y="594" width="1.0" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="1087.8" y="606"></text></g>
+<g><title>execute [pg] 0.1%</title><rect x="1085.8" y="441" width="0.9" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1088.8" y="453"></text></g>
+<g><title>_send [pg] 0.1%</title><rect x="1085.8" y="458" width="0.9" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1088.8" y="470"></text></g>
+<g><title>Writable.write [node core] 0.1%</title><rect x="1085.8" y="475" width="0.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1088.8" y="487"></text></g>
+<g><title>_write [node core] 0.1%</title><rect x="1085.8" y="492" width="0.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1088.8" y="504"></text></g>
+<g><title>writeOrBuffer [node core] 0.1%</title><rect x="1085.8" y="509" width="0.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1088.8" y="521"></text></g>
+<g><title>Socket._write [node core] 0.1%</title><rect x="1085.8" y="526" width="0.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1088.8" y="538"></text></g>
+<g><title>Socket._writeGeneric [node core] 0.1%</title><rect x="1085.8" y="543" width="0.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1088.8" y="555"></text></g>
+<g><title>writeGeneric [node core] 0.1%</title><rect x="1085.8" y="560" width="0.9" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1088.8" y="572"></text></g>
+<g><title>handleWriteReq [node core] 0%</title><rect x="1085.8" y="577" width="0.7" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1088.8" y="589"></text></g>
+<g><title>writeBuffer [V8 / native] 0%</title><rect x="1085.8" y="594" width="0.7" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="1088.8" y="606"></text></g>
+<g><title>bind [pg] 0.1%</title><rect x="1086.7" y="424" width="0.7" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1089.7" y="436"></text></g>
+<g><title>_send [pg] 0%</title><rect x="1086.7" y="441" width="0.4" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1089.7" y="453"></text></g>
+<g><title>Writable.write [node core] 0%</title><rect x="1086.7" y="458" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1089.7" y="470"></text></g>
+<g><title>_write [node core] 0%</title><rect x="1086.7" y="475" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1089.7" y="487"></text></g>
+<g><title>writeOrBuffer [node core] 0%</title><rect x="1086.7" y="492" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1089.7" y="504"></text></g>
+<g><title>Socket._write [node core] 0%</title><rect x="1086.7" y="509" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1089.7" y="521"></text></g>
+<g><title>Socket._writeGeneric [node core] 0%</title><rect x="1086.7" y="526" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1089.7" y="538"></text></g>
+<g><title>writeGeneric [node core] 0%</title><rect x="1086.7" y="543" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1089.7" y="555"></text></g>
+<g><title>handleWriteReq [node core] 0%</title><rect x="1086.7" y="560" width="0.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1089.7" y="572"></text></g>
+<g><title>writeBuffer [V8 / native] 0%</title><rect x="1086.7" y="577" width="0.4" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="1089.7" y="589"></text></g>
+<g><title>setTimeout [node core] 0.1%</title><rect x="1088.9" y="305" width="0.8" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1091.9" y="317"></text></g>
+<g><title>noParse [pg-types] 0.2%</title><rect x="1090.4" y="220" width="2.1" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1093.4" y="232"></text></g>
+<g><title>parseDate [postgres-date] 0.1%</title><rect x="1092.5" y="220" width="1.4" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1095.5" y="232"></text></g>
+<g><title>_handleRowDescription [pg] 0.1%</title><rect x="1093.9" y="220" width="0.7" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1096.9" y="232"></text></g>
+<g><title>handleRowDescription [pg] 0.1%</title><rect x="1093.9" y="237" width="0.7" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1096.9" y="249"></text></g>
+<g><title>addFields [pg] 0%</title><rect x="1093.9" y="254" width="0.4" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1096.9" y="266"></text></g>
+<g><title>_createPrebuiltEmptyResultObject [pg] 0%</title><rect x="1093.9" y="271" width="0.4" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1096.9" y="283"></text></g>
+<g><title>handlePacket [pg-protocol] 9.4%</title><rect x="1106.1" y="186" width="132.2" height="16" fill="#4f86b0" stroke="#fff" stroke-width="0.3"/><text x="1109.1" y="198">handlePacket</text></g>
+<g><title>parseDataRowMessage [pg-protocol] 9%</title><rect x="1106.1" y="203" width="126.6" height="16" fill="#4f86b0" stroke="#fff" stroke-width="0.3"/><text x="1109.1" y="215">parseDataRowMessage</text></g>
+<g><title>string [pg-protocol] 7%</title><rect x="1106.1" y="220" width="98.2" height="16" fill="#4f86b0" stroke="#fff" stroke-width="0.3"/><text x="1109.1" y="232">string</text></g>
+<g><title>toString [node core] 7%</title><rect x="1106.1" y="237" width="98.2" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1109.1" y="249">toString</text></g>
+<g><title>slice [node core] 6.8%</title><rect x="1106.1" y="254" width="95.1" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1109.1" y="266">slice</text></g>
+<g><title>utf8Slice [V8 / native] 3.9%</title><rect x="1106.1" y="271" width="54.7" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="1109.1" y="283">utf8Slic</text></g>
+<g><title>getEncodingOps [node core] 0.1%</title><rect x="1201.2" y="254" width="1.5" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1204.2" y="266"></text></g>
+<g><title>int16 [pg-protocol] 0.1%</title><rect x="1204.4" y="220" width="1.1" height="16" fill="#4f86b0" stroke="#fff" stroke-width="0.3"/><text x="1207.4" y="232"></text></g>
+<g><title>readInt16BE [node core] 0.1%</title><rect x="1204.4" y="237" width="1.1" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1207.4" y="249"></text></g>
+<g><title>wrappedFn [node core] 0.1%</title><rect x="1204.4" y="254" width="1.1" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1207.4" y="266"></text></g>
+<g><title>(anonymous) [node core] 0.1%</title><rect x="1204.4" y="271" width="1.1" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1207.4" y="283"></text></g>
+<g><title>slice [node core] 0.1%</title><rect x="1232.8" y="203" width="1.4" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1235.8" y="215"></text></g>
+<g><title>getEncodingOps [node core] 0%</title><rect x="1234.1" y="203" width="0.6" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1237.1" y="215"></text></g>
+<g><title>parseRowDescriptionMessage [pg-protocol] 0%</title><rect x="1234.8" y="203" width="0.6" height="16" fill="#4f86b0" stroke="#fff" stroke-width="0.3"/><text x="1237.8" y="215"></text></g>
+<g><title>parseDataRowMessage [pg-protocol] 0.1%</title><rect x="1238.4" y="186" width="0.7" height="16" fill="#4f86b0" stroke="#fff" stroke-width="0.3"/><text x="1241.4" y="198"></text></g>
+<g><title>mergeBuffer [pg-protocol] 0%</title><rect x="1239.1" y="186" width="0.7" height="16" fill="#4f86b0" stroke="#fff" stroke-width="0.3"/><text x="1242.1" y="198"></text></g>
+<g><title>handlePacket [pg-protocol] 0.1%</title><rect x="1246.1" y="169" width="1.2" height="16" fill="#4f86b0" stroke="#fff" stroke-width="0.3"/><text x="1249.1" y="181"></text></g>
+<g><title>_handleDataRow [pg] 0.1%</title><rect x="1247.3" y="169" width="0.9" height="16" fill="#669bbc" stroke="#fff" stroke-width="0.3"/><text x="1250.3" y="181"></text></g>
+<g><title>maybeReadMore [node core] 0.2%</title><rect x="1259.3" y="135" width="2.3" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1262.3" y="147"></text></g>
+<g><title>nextTick [node core] 0.2%</title><rect x="1259.3" y="152" width="2.3" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1262.3" y="164"></text></g>
+<g><title>(garbage collector) [GC] 9.1%</title><rect x="1262.3" y="67" width="127.7" height="16" fill="#7d7d7d" stroke="#fff" stroke-width="0.3"/><text x="1265.3" y="79">(garbage collector)</text></g>
+<g><title>parserOnHeadersComplete [node core] 0.5%</title><rect x="1390.0" y="67" width="7.0" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="79"></text></g>
+<g><title>parserOnIncoming [node core] 0.5%</title><rect x="1390.0" y="84" width="6.5" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="96"></text></g>
+<g><title>emit [node core] 0.4%</title><rect x="1390.0" y="101" width="5.8" height="16" fill="#bbbbbb" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="113"></text></g>
+<g><title>app [express] 0.4%</title><rect x="1390.0" y="118" width="5.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="130"></text></g>
+<g><title>handle [express] 0.4%</title><rect x="1390.0" y="135" width="5.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="147"></text></g>
+<g><title>handle [express] 0.4%</title><rect x="1390.0" y="152" width="5.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="164"></text></g>
+<g><title>next [express] 0.4%</title><rect x="1390.0" y="169" width="5.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="181"></text></g>
+<g><title>process_params [express] 0.4%</title><rect x="1390.0" y="186" width="5.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="198"></text></g>
+<g><title>(anonymous) [express] 0.4%</title><rect x="1390.0" y="203" width="5.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="215"></text></g>
+<g><title>trim_prefix [express] 0.4%</title><rect x="1390.0" y="220" width="5.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="232"></text></g>
+<g><title>handle [express] 0.4%</title><rect x="1390.0" y="237" width="5.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="249"></text></g>
+<g><title>query [express] 0.4%</title><rect x="1390.0" y="254" width="5.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="266"></text></g>
+<g><title>next [express] 0.4%</title><rect x="1390.0" y="271" width="5.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="283"></text></g>
+<g><title>process_params [express] 0.4%</title><rect x="1390.0" y="288" width="5.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="300"></text></g>
+<g><title>(anonymous) [express] 0.4%</title><rect x="1390.0" y="305" width="5.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="317"></text></g>
+<g><title>trim_prefix [express] 0.4%</title><rect x="1390.0" y="322" width="5.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="334"></text></g>
+<g><title>handle [express] 0.4%</title><rect x="1390.0" y="339" width="5.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="351"></text></g>
+<g><title>expressInit [express] 0.4%</title><rect x="1390.0" y="356" width="5.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="368"></text></g>
+<g><title>next [express] 0.4%</title><rect x="1390.0" y="373" width="5.0" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="385"></text></g>
+<g><title>process_params [express] 0.3%</title><rect x="1390.0" y="390" width="4.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="402"></text></g>
+<g><title>(anonymous) [express] 0.3%</title><rect x="1390.0" y="407" width="4.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="419"></text></g>
+<g><title>trim_prefix [express] 0.3%</title><rect x="1390.0" y="424" width="4.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="436"></text></g>
+<g><title>handle [express] 0.3%</title><rect x="1390.0" y="441" width="4.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="453"></text></g>
+<g><title>logger [morgan] 0.3%</title><rect x="1390.0" y="458" width="4.8" height="16" fill="#9bc1bc" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="470"></text></g>
+<g><title>next [express] 0.2%</title><rect x="1390.0" y="475" width="2.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="487"></text></g>
+<g><title>process_params [express] 0.2%</title><rect x="1390.0" y="492" width="2.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="504"></text></g>
+<g><title>(anonymous) [express] 0.2%</title><rect x="1390.0" y="509" width="2.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="521"></text></g>
+<g><title>trim_prefix [express] 0.2%</title><rect x="1390.0" y="526" width="2.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="538"></text></g>
+<g><title>handle [express] 0.2%</title><rect x="1390.0" y="543" width="2.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="555"></text></g>
+<g><title>jsonParser [body-parser] 0.2%</title><rect x="1390.0" y="560" width="2.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="572"></text></g>
+<g><title>next [express] 0.2%</title><rect x="1390.0" y="577" width="2.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="589"></text></g>
+<g><title>process_params [express] 0.2%</title><rect x="1390.0" y="594" width="2.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="606"></text></g>
+<g><title>(anonymous) [express] 0.2%</title><rect x="1390.0" y="611" width="2.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="623"></text></g>
+<g><title>trim_prefix [express] 0.2%</title><rect x="1390.0" y="628" width="2.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="640"></text></g>
+<g><title>handle [express] 0.2%</title><rect x="1390.0" y="645" width="2.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="657"></text></g>
+<g><title>mounted_app [express] 0.2%</title><rect x="1390.0" y="662" width="2.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="674"></text></g>
+<g><title>handle [express] 0.2%</title><rect x="1390.0" y="679" width="2.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="691"></text></g>
+<g><title>handle [express] 0.2%</title><rect x="1390.0" y="696" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="708"></text></g>
+<g><title>next [express] 0.2%</title><rect x="1390.0" y="713" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="725"></text></g>
+<g><title>process_params [express] 0.2%</title><rect x="1390.0" y="730" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="742"></text></g>
+<g><title>(anonymous) [express] 0.2%</title><rect x="1390.0" y="747" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="759"></text></g>
+<g><title>trim_prefix [express] 0.2%</title><rect x="1390.0" y="764" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="776"></text></g>
+<g><title>handle [express] 0.2%</title><rect x="1390.0" y="781" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="793"></text></g>
+<g><title>query [express] 0.2%</title><rect x="1390.0" y="798" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="810"></text></g>
+<g><title>next [express] 0.2%</title><rect x="1390.0" y="815" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="827"></text></g>
+<g><title>process_params [express] 0.2%</title><rect x="1390.0" y="832" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="844"></text></g>
+<g><title>(anonymous) [express] 0.2%</title><rect x="1390.0" y="849" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="861"></text></g>
+<g><title>trim_prefix [express] 0.2%</title><rect x="1390.0" y="866" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="878"></text></g>
+<g><title>handle [express] 0.2%</title><rect x="1390.0" y="883" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="895"></text></g>
+<g><title>expressInit [express] 0.2%</title><rect x="1390.0" y="900" width="2.3" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="912"></text></g>
+<g><title>next [express] 0.1%</title><rect x="1390.0" y="917" width="1.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="929"></text></g>
+<g><title>process_params [express] 0.1%</title><rect x="1390.0" y="934" width="1.7" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="946"></text></g>
+<g><title>(anonymous) [express] 0.1%</title><rect x="1390.0" y="951" width="1.7" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="963"></text></g>
+<g><title>trim_prefix [express] 0.1%</title><rect x="1390.0" y="968" width="1.7" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="980"></text></g>
+<g><title>handle [express] 0.1%</title><rect x="1390.0" y="985" width="1.7" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="997"></text></g>
+<g><title>mounted_app [express] 0.1%</title><rect x="1390.0" y="1002" width="1.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1014"></text></g>
+<g><title>handle [express] 0.1%</title><rect x="1390.0" y="1019" width="1.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1031"></text></g>
+<g><title>handle [express] 0.1%</title><rect x="1390.0" y="1036" width="1.5" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1048"></text></g>
+<g><title>next [express] 0.1%</title><rect x="1390.0" y="1053" width="1.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1065"></text></g>
+<g><title>process_params [express] 0.1%</title><rect x="1390.0" y="1070" width="1.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1082"></text></g>
+<g><title>(anonymous) [express] 0.1%</title><rect x="1390.0" y="1087" width="1.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1099"></text></g>
+<g><title>trim_prefix [express] 0.1%</title><rect x="1390.0" y="1104" width="1.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1116"></text></g>
+<g><title>handle [express] 0.1%</title><rect x="1390.0" y="1121" width="1.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1133"></text></g>
+<g><title>query [express] 0.1%</title><rect x="1390.0" y="1138" width="1.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1150"></text></g>
+<g><title>next [express] 0.1%</title><rect x="1390.0" y="1155" width="1.4" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1167"></text></g>
+<g><title>process_params [express] 0.1%</title><rect x="1390.0" y="1172" width="1.2" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1184"></text></g>
+<g><title>(anonymous) [express] 0.1%</title><rect x="1390.0" y="1189" width="1.2" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1201"></text></g>
+<g><title>trim_prefix [express] 0.1%</title><rect x="1390.0" y="1206" width="1.2" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1218"></text></g>
+<g><title>handle [express] 0.1%</title><rect x="1390.0" y="1223" width="1.2" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1235"></text></g>
+<g><title>expressInit [express] 0.1%</title><rect x="1390.0" y="1240" width="1.2" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1252"></text></g>
+<g><title>next [express] 0.1%</title><rect x="1390.0" y="1257" width="1.0" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1269"></text></g>
+<g><title>process_params [express] 0.1%</title><rect x="1390.0" y="1274" width="0.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1286"></text></g>
+<g><title>param [express] 0.1%</title><rect x="1390.0" y="1291" width="0.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1303"></text></g>
+<g><title>param [express] 0.1%</title><rect x="1390.0" y="1308" width="0.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1320"></text></g>
+<g><title>(anonymous) [express] 0.1%</title><rect x="1390.0" y="1325" width="0.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1337"></text></g>
+<g><title>handle [express] 0.1%</title><rect x="1390.0" y="1342" width="0.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1354"></text></g>
+<g><title>dispatch [express] 0.1%</title><rect x="1390.0" y="1359" width="0.8" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1371"></text></g>
+<g><title>next [express] 0.1%</title><rect x="1390.0" y="1376" width="0.7" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1388"></text></g>
+<g><title>handle [express] 0.1%</title><rect x="1390.0" y="1393" width="0.7" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1405"></text></g>
+<g><title>(anonymous) [zod-express-middleware] 0.1%</title><rect x="1390.0" y="1410" width="0.7" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1422"></text></g>
+<g><title>safeParse [zod] 0%</title><rect x="1390.0" y="1427" width="0.4" height="16" fill="#a8c686" stroke="#fff" stroke-width="0.3"/><text x="1393.0" y="1439"></text></g>
+<g><title>getip [morgan] 0.1%</title><rect x="1392.5" y="475" width="0.7" height="16" fill="#9bc1bc" stroke="#fff" stroke-width="0.3"/><text x="1395.5" y="487"></text></g>
+<g><title>ip [express] 0%</title><rect x="1392.5" y="492" width="0.6" height="16" fill="#c4a1d6" stroke="#fff" stroke-width="0.3"/><text x="1395.5" y="504"></text></g>
+<g><title>proxyaddr [proxy-addr] 0%</title><rect x="1392.5" y="509" width="0.6" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1395.5" y="521"></text></g>
+<g><title>alladdrs [proxy-addr] 0%</title><rect x="1392.5" y="526" width="0.6" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1395.5" y="538"></text></g>
+<g><title>forwarded [forwarded] 0%</title><rect x="1392.5" y="543" width="0.6" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1395.5" y="555"></text></g>
+<g><title>getSocketAddr [forwarded] 0%</title><rect x="1392.5" y="560" width="0.4" height="16" fill="#ece2d0" stroke="#fff" stroke-width="0.3"/><text x="1395.5" y="572"></text></g>
+<g><title>onFinished [morgan] 0%</title><rect x="1393.2" y="475" width="0.6" height="16" fill="#9bc1bc" stroke="#fff" stroke-width="0.3"/><text x="1396.2" y="487"></text></g>
+<g><title>attachListener [morgan] 0%</title><rect x="1393.2" y="492" width="0.6" height="16" fill="#9bc1bc" stroke="#fff" stroke-width="0.3"/><text x="1396.2" y="504"></text></g>
+<g><title>(program) [V8 / native] 0.2%</title><rect x="1397.0" y="67" width="2.6" height="16" fill="#d9d9d9" stroke="#fff" stroke-width="0.3"/><text x="1400.0" y="79"></text></g>
+</svg>

@@ -1,0 +1,77 @@
+name: weathertrack
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: weather-db
+    environment:
+      POSTGRES_USER: WeatherTrack
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: WeatherTrack
+    ports:
+      - '5432:5432'
+    shm_size: 1g
+    # Identical DB resources for every benchmark run (before / after)
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 4g
+    command:
+      - postgres
+      - -c
+      - max_connections=200
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+      - -c
+      - pg_stat_statements.track=all
+      - -c
+      - log_min_duration_statement=500
+    volumes:
+      - weather-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U WeatherTrack']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  redis:
+    image: redis:7-alpine
+    container_name: weather-redis
+    command: ['redis-server', '--maxmemory', '256mb', '--maxmemory-policy', 'allkeys-lru', '--save', '', '--appendonly', 'no']
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: weather-prometheus
+    profiles: ['monitoring']
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - '9090:9090'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: weather-grafana
+    profiles: ['monitoring']
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: 'true'
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - '3001:3000'
+    depends_on:
+      - prometheus
+
+volumes:
+  weather-db-data:

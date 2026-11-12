@@ -6,3 +6,4 @@ bench/results/*.log
 *.heapsnapshot
 .baseline/
 .versions/
+docs/.rapport-print.html

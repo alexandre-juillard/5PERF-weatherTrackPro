@@ -18,6 +18,7 @@
     "seed": "node scripts/seed.mjs",
     "bench:load": "node bench/load.mjs",
     "bench:micro": "node bench/micro.bench.mjs",
+    "pdf": "node docs/build-pdf.mjs",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "author": "SUPINFO",
@@ -37,8 +38,10 @@
     "eslint": "^8.56.0",
     "eslint-plugin-sonarjs": "^0.25.1",
     "jest": "^29.7.0",
+    "marked": "^18.2.0",
     "mitata": "^1.0.34",
     "node-pg-migrate": "^9.0.0",
+    "pdf-lib": "^1.17.1",
     "supertest": "^7.3.2",
     "ts-jest": "^29.4.15",
     "ts-node": "^10.9.2",

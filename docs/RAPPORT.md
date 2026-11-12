@@ -1,21 +1,29 @@
-# WeatherTrack Pro — Audit et optimisation des performances
+<!-- pdf:skip-start -->
+# 5PERF — Audit de performance WeatherTrack Pro
 
 **Rapport complet : audit (avant) → optimisations (après) → recommandations**
 
-| | |
+Réalisation : Juillard Alexandre · Kouachi Renda · Monnier Thonin — Supinfo Lyon, 2026
+<!-- pdf:skip-end -->
+
+### Fiche du projet
+
+| Élément | Détail |
 |---|---|
 | Application | WeatherTrack Pro — backend Node.js / Express / PostgreSQL |
 | Périmètre | API de récupération (`/weather/data`) et d'analyse (`/weather/avg`, `/min`, `/max`) des données météorologiques historiques |
 | Version auditée | `v0-baseline` (commit `3d57400`, code fourni) |
 | Version livrée | `v4-runtime` (+ outillage de mesure, migrations, tests) |
 | Historique | une étape = un commit + un tag git : `v0-baseline` → `v1-sql` → `v2-schema` → `v3-cache` → `v4-runtime` |
-| Figures | PNG dans [`assets/`](assets) (pour la conversion PDF) ; versions SVG interactives (infobulles) à côté |
+| Figures | sources PNG et SVG dans `docs/assets/` |
+
+> **Comment lire ce rapport.** Le document suit une logique « avant / après ». Les chapitres 1 et 2 présentent la méthode de travail et l'état initial de l'application ; le chapitre 3 décrit les corrections apportées et leur effet mesuré, étape par étape ; le chapitre 4 détaille la réorganisation des données ; le chapitre 5 compare l'avant et l'après ; les chapitres 6 et 7 traitent des conséquences pour les utilisateurs de l'API et des recommandations pour la suite. Les encadrés « En clair » résument, en termes non techniques, ce qu'il faut retenir de chaque tableau ou graphique.
 
 ---
 
 ## Sommaire
 
-0. [Résumé exécutif](#0-résumé-exécutif)
+0. [Résumé de l'intervention](#0-résumé-de-lintervention)
 1. [Contexte, méthodologie et outillage](#1-contexte-méthodologie-et-outillage)
 2. [AVANT — Audit de performance](#2-avant--audit-de-performance)
 3. [APRÈS — Optimisations réalisées](#3-après--optimisations-réalisées)
@@ -27,7 +35,7 @@
 
 ---
 
-## 0. Résumé exécutif
+## 0. Résumé de l'intervention
 
 **Constat.** L'API calculait chaque analyse en chargeant **tout l'historique** de la ville demandée (≈ 11 000 lignes
 pour 30 ans), puis en le validant, le convertissant et le filtrant **ligne par ligne en JavaScript** (zod, dayjs),
@@ -37,14 +45,16 @@ dans l'unique thread de Node.js. Plus de 80 % du CPU était consommé par ce tra
 pour ces lectures, lisait **une page disque par ligne**. Six bugs fonctionnels ont également été trouvés (erreurs 500
 sur une période vide, dates décalées selon le fuseau horaire, etc.).
 
-**Actions**, par ordre de rentabilité, chacune mesurée :
+**Actions**, par ordre de rentabilité, chacune mesurée. Chaque version représente des actions réparties par priorité et impact sur le business de l'application :
 
 | Étape | Contenu | Effet principal mesuré |
 |---|---|---|
 | **v1** | calculs et filtres délégués à PostgreSQL, suppression du travail par ligne, pagination, export en streaming, bugs corrigés | **×80 à ×148** sur les analyses et récupérations sur une période ; event loop p99 : 8,4 s → 23 ms |
 | **v2** | migration du schéma : table `locations`, partitionnement annuel, index couvrant, données réordonnées (11 M lignes migrées en 83 s) | historique complet sur L : **×11** (43 → 492 req/s) ; pages lues par requête : 11 003 → 183 |
 | **v3** | cache Redis (invalidation par ville, anti-effet troupeau, tolérant aux pannes), cache HTTP | requêtes répétées : **×1,5 à ×3,7** |
-| **v4** | JavaScript compilé, cluster multi-cœurs, logs asynchrones, métriques Prometheus, arrêt gracieux, tests, 0 vulnérabilité | **×2,6 à ×4,1** (4 cœurs) ; mémoire −40 % par processus ; démarrage 4,6 s → 2,0 s |
+| **v4** | JavaScript compilé, cluster multi-cœurs, logs asynchrones, métriques Prometheus, arrêt maitrisé, tests, 0 vulnérabilité | **×2,6 à ×4,1** (4 cœurs) ; mémoire −40 % par processus ; démarrage 4,6 s → 2,0 s |
+
+> **En clair.** Le travail a été mené en quatre étapes successives, de la plus rentable à la plus structurelle. La première, qui consiste simplement à « laisser la base de données faire les calculs » au lieu de rapatrier toutes les données sur le serveur, apporte à elle seule l'essentiel du gain. Les étapes suivantes consolident ce résultat : réorganisation des données, mémorisation des réponses fréquentes, puis exploitation de tous les cœurs du processeur.
 
 **Résultat global (version d'origine → version finale, 4 processus) :**
 
@@ -60,6 +70,8 @@ sur une période vide, dates décalées selon le fuseau horaire, etc.).
 | Export historique complet | L | 10 | 108 | **×11** | 8 813 ms | 752 ms | 136 ms | 46 ms |
 | Requêtes populaires (mix) | S | 7,6 | 4 991 | **×657** | 7 096 ms | 17 ms | 115 ms | 2 ms |
 | Requêtes populaires (mix) | L | 9,1 | 5 084 | **×559** | 6 059 ms | 17 ms | 114 ms | 2 ms |
+
+> **En clair.** Sur une même machine, l'application traite désormais en une seconde ce qui lui demandait auparavant plusieurs minutes. Là où un serveur répondait à environ 17 demandes d'analyse par seconde, il en sert aujourd'hui plus de 5 000 ; sous forte affluence, le temps d'attente ressenti par un utilisateur passe de 5 à 9 secondes à quelques centièmes de seconde. Seul l'export de l'historique complet reste une opération « lourde » (moins d'une seconde), ce qui s'explique par le volume de données transmis ; une piste d'amélioration est proposée dans les recommandations.
 
 - **Capacité** : ×237 à ×859 sur les analyses et récupérations, ×11 à ×12 sur l'export complet ; **par cœur de
   CPU**, la version finale traite 140 à 270 fois plus de requêtes d'analyse que l'originale.
@@ -150,6 +162,8 @@ Les données réelles n'étant pas accessibles, deux jeux synthétiques reproduc
   même volume ; la différence est la **taille totale** (cache mémoire de PostgreSQL vs lectures disque) et le
   **nombre de clés** distinctes (efficacité du cache applicatif).
 
+> **En clair.** Faute d'accès aux données réelles, deux jeux de données réalistes ont été fabriqués : un « petit » (S, 100 villes) et un « grand » (L, 1 000 villes), couvrant chacun 30 ans de relevés quotidiens. Comparer les deux permet de vérifier si l'application ralentit lorsque la base de données grossit — c'est précisément le problème rencontré par WeatherTrack Pro.
+
 ### 1.4 Outillage
 
 | Besoin | Outil utilisé | Fichier |
@@ -167,6 +181,8 @@ Les données réelles n'étant pas accessibles, deux jeux synthétiques reproduc
 | Tests | **Jest** + ts-jest (ESM) + **supertest** | [`test/`](../test) |
 | Observabilité en production | **prom-client** + Prometheus + Grafana, **pino** | [`src/metrics.ts`](../src/metrics.ts), [`monitoring/`](../monitoring) |
 | Qualité / sécurité | **ESLint** (typescript-eslint + **sonarjs**), **depcheck**, **npm audit** | [`.eslintrc.json`](../.eslintrc.json) |
+
+> **En clair.** Chaque outil répond à une question précise : « combien de demandes le serveur supporte-t-il ? » (tests de charge), « à quoi le processeur consacre-t-il son temps ? » (profilage), « quelle quantité de données la base lit-elle ? » (plans d'exécution), « les résultats sont-ils toujours justes ? » (tests et comparaisons automatiques). Tous ces outils sont conservés dans le projet afin que les mesures puissent être refaites à tout moment.
 
 ### 1.5 Protocole de mesure
 
@@ -189,6 +205,17 @@ Pour chaque version et chaque jeu de données ([`bench/campaign.mjs`](../bench/c
 | `data-full` | v0 : `GET /weather/data/{ville}` ; après : `GET /weather/export/{ville}` (≈11 000 lignes, même contenu) | export complet |
 | `hot` | 65 requêtes « populaires » tirées au hasard (5 villes, années récentes) | trafic réel, favorable au cache |
 
+> **En clair.** Les cinq scénarios reproduisent les usages typiques des clients : un chercheur qui calcule une moyenne sur 30 ans, un agriculteur ou un organisateur d'événements qui consulte une année précise, un utilisateur qui télécharge des relevés bruts, un export complet destiné à une analyse externe, et enfin le trafic réel, où une poignée de questions populaires représente l'essentiel des demandes. Chaque scénario est d'abord joué par un utilisateur seul (temps de réponse « idéal »), puis par 50 utilisateurs simultanés (tenue en charge).
+
+> **Comment lire les tableaux de mesures.**
+>
+> - **Débit (req/s)** : nombre de demandes traitées par seconde — plus il est élevé, mieux c'est.
+> - **Latence p50** : temps de réponse « typique » (la moitié des utilisateurs attendent moins longtemps) ; **p99** : temps de réponse des 1 % d'utilisateurs les moins bien servis — plus ces valeurs sont basses, mieux c'est.
+> - **Latence unitaire** : temps de réponse pour un utilisateur seul, sans affluence.
+> - **Event loop** : durée pendant laquelle le serveur est complètement bloqué et ne peut répondre à personne.
+> - **CPU** : occupation du processeur (100 % = un cœur entièrement occupé) ; **RSS** : mémoire vive utilisée.
+> - **×N** : facteur d'amélioration (×10 signifie « dix fois mieux »).
+
 ### 1.6 Limites des mesures
 
 - Client de charge, API et bases sur la **même machine** : pas de latence réseau réelle et concurrence pour le CPU ;
@@ -196,7 +223,7 @@ Pour chaque version et chaque jeu de données ([`bench/campaign.mjs`](../bench/c
   avant/après** sont la donnée à retenir.
 - Ordinateur portable : la fréquence CPU varie (gestion d'énergie). D'où la médiane de 3 répétitions et une
   campagne finale en **une seule passe** pour toutes les versions (mêmes conditions thermiques).
-- Docker Desktop (WSL2) ajoute une couche réseau entre Node et PostgreSQL (voir § 2.5, P13).
+- Docker Desktop (WSL2) ajoute une couche réseau entre Node et PostgreSQL (voir § 2.6, P13).
 
 ---
 
@@ -229,6 +256,8 @@ délai de l'event loop, CPU et mémoire du processus.
 | `hot` (requêtes populaires) | S | 7,6 req/s | 4 945 ms | 7 096 ms | 115 ms | 5 360 ms | 114 % | 417 Mo | 0 |
 | | L | 9,1 req/s | 5 177 ms | 6 059 ms | 114 ms | 5 654 ms | 115 % | 439 Mo | 0 |
 
+> **En clair.** Ce tableau décrit l'état de l'application au début de la mission. Avec seulement 50 utilisateurs connectés en même temps, chacun attend en moyenne plus de 5 secondes une réponse qui devrait être quasi instantanée, et 1 % d'entre eux patientent jusqu'à 9 secondes. Le serveur ne traite que 6 à 17 demandes par seconde. À titre de repère, un service web est généralement perçu comme lent au-delà d'une seconde d'attente. Sur le grand jeu de données, des demandes commencent même à échouer.
+
 **Lecture des mesures :**
 
 - **Capacité dérisoire** : 6 à 17 req/s par serveur. Au-delà, les requêtes s'accumulent : avec 50 utilisateurs, le
@@ -260,6 +289,10 @@ Profils V8 capturés pendant 10 s de charge (50 connexions), jeu S. Pourcentages
 | node core + V8 natif (sockets, buffers, UTF-8) | 19,7 % | 8,0 % | 12,9 % |
 | pg + pg-protocol (décodage du protocole) | 10,3 % | 3,7 % | 5,7 % |
 | code applicatif `src/` | 3,5 % | 2,3 % | 1,5 % |
+
+> **En clair.** Ce tableau montre à quoi le processeur du serveur consacre son temps. Pour une moyenne sur un an, 60 % de l'effort part dans la manipulation de dates et près de 20 % dans la vérification et la conversion de données pourtant déjà fiables. Le calcul réellement utile — la moyenne — ne pèse que 2 à 3 %. Autrement dit, le serveur passe l'essentiel de son temps à préparer des informations dont il n'a pas besoin.
+
+> **Comment lire un flamegraph.** Chaque rectangle représente une fonction du programme ; sa largeur est proportionnelle au temps processeur qu'elle consomme, et les fonctions appelées sont dessinées sous celle qui les appelle. Un large bloc d'une seule couleur signale donc une concentration du travail : c'est là qu'il faut agir en priorité.
 
 ![Flamegraph v0 avg-1y](assets/flame-v0-avg-1y.png)
 
@@ -311,6 +344,8 @@ Mesure sur 200 villes aléatoires, médiane, cache PostgreSQL « tiède » ([`be
 | Agrégat sur l'historique complet | **67,1 ms** | 11 003 | 9 827 |
 | Agrégat sur 1 an | 2,2 ms | 370 | 310 |
 
+> **En clair.** La base de données peut se comparer à une bibliothèque. Pour lire l'historique d'une ville, la version d'origine devait parcourir plus de 11 000 rayons différents, car les relevés de cette ville étaient rangés au fil de l'eau, mélangés jour après jour à ceux de toutes les autres villes. De plus, même pour une question portant sur une seule semaine, l'application demandait systématiquement les 30 années d'archives. Ce temps de recherche reste modéré (67 ms), mais il augmente avec la taille de la base et s'ajoute au gaspillage constaté côté serveur.
+
 ### 2.5 Micro-benchmarks : coût unitaire des mauvaises pratiques
 
 [`bench/micro.bench.mjs`](../bench/micro.bench.mjs) (mitata), 10 958 lignes = l'historique d'une ville :
@@ -322,6 +357,8 @@ Mesure sur 200 villes aléatoires, médiane, cache PostgreSQL « tiède » ([`be
 | Calculer la moyenne | `map()` + `reduce()` : 421 µs | boucle `for` : 45 µs | ×9,4 |
 | Sérialiser la réponse | `JSON.stringify` de 10 958 lignes : **41,6 ms** | `JSON.stringify({avg})` : 0,36 µs | ×117 000 |
 
+> **En clair.** Ces mesures isolent chaque mauvaise pratique pour en chiffrer le coût. La plus pénalisante est le filtrage des dates : réalisé avec une bibliothèque généraliste, il est plus de 400 fois plus lent qu'une simple comparaison de nombres. La mise en forme de la réponse (sérialisation) de tout l'historique coûte elle aussi très cher, alors que l'utilisateur n'attend souvent qu'un seul chiffre.
+
 Une requête `avg-1y` coûte donc à elle seule **~130 ms de CPU bloquant** (zod + dayjs + conversion des dates)
 pour renvoyer un nombre : 50 utilisateurs simultanés attendent en file plusieurs secondes.
 
@@ -329,6 +366,8 @@ pour renvoyer un nombre : 50 utilisateurs simultanés attendent en file plusieur
 
 Échelle de gravité : 🔴 critique (bloque le service sous charge) · 🟠 élevée · 🟡 moyenne · ⚪ faible.
 Les numéros de ligne renvoient au code d'origine (tag `v0-baseline`).
+
+> **En clair.** Chaque fiche décrit un problème selon la même structure : où il se trouve dans le code, ce qui a été constaté, la mesure qui le prouve et ses conséquences pour les utilisateurs comme pour l'entreprise. Les trois premiers problèmes (en rouge) expliquent à eux seuls l'essentiel de la lenteur ressentie par les clients.
 
 #### P1 🔴 Tout l'historique d'une ville est chargé, quel que soit le filtre
 
@@ -500,6 +539,8 @@ Les numéros de ligne renvoient au code d'origine (tag `v0-baseline`).
 | B5 | mesure renvoyée deux fois → 500 | pas d'`ON CONFLICT` | cf. P14 |
 | B6 | arrêt brutal (`SIGINT` → `process.exit(0)`) | pas d'arrêt gracieux | requêtes en cours coupées à chaque déploiement |
 
+> **En clair.** Au-delà de la lenteur, l'audit a révélé six anomalies de fonctionnement. Les plus visibles pour les clients sont les erreurs serveur lorsqu'une période ne contient aucun relevé (B1) et des dates décalées d'un jour selon le fuseau horaire du serveur (B3). Ces anomalies entament la confiance des utilisateurs dans les données ; elles ont toutes été corrigées.
+
 ### 2.7 Priorisation
 
 | Priorité | Problèmes | Effort | Pourquoi dans cet ordre |
@@ -509,6 +550,8 @@ Les numéros de ligne renvoient au code d'origine (tag `v0-baseline`).
 | **3** | P8 | moyen (Redis) | multiplie la capacité sur les requêtes répétées, décharge la base → **étape v3** |
 | **4** | P9, P10, P11, P12, P15, P16, B6 | faible à moyen | capacité multi-cœurs, résilience, observabilité, qualité → **étape v4** |
 | environnement | P13 | trivial | corrigé dès sa découverte (configuration) |
+
+> **En clair.** Les corrections ont été ordonnées selon un principe simple : traiter d'abord ce qui rapporte le plus pour le moindre effort et le moindre risque. Les problèmes de priorité 1 se corrigent uniquement dans le code de l'application, sans toucher à l'infrastructure ni aux données ; ils expliquaient pourtant plus de 80 % du gaspillage. Les chantiers plus lourds (réorganisation des données, cache, mise à l'échelle) viennent ensuite.
 
 Chaque étape a été **mesurée séparément** (§ 5) pour vérifier que l'ordre choisi correspondait bien aux gains réels.
 
@@ -535,6 +578,8 @@ Chaque étape est un commit/tag git, mesurée indépendamment (§ 5). Les liens 
 | `127.0.0.1` au lieu de `localhost` | P13 | `config/default.yaml` |
 | Plage vide → `null` (200) ; ville inconnue → 404 ; `from` inclusif | B1, B2, B4 | `service.ts` |
 
+> **En clair.** L'idée directrice de cette étape est de « faire travailler chacun dans son domaine ». La base de données, conçue pour filtrer et calculer sur de grands volumes, effectue désormais elle-même les moyennes, minimums et maximums sur la période demandée : elle renvoie un seul résultat au lieu de 11 000 lignes. Les gros téléchargements sont découpés en pages ou envoyés au fil de l'eau, ce qui évite de saturer la mémoire du serveur. Cette étape corrige aussi les anomalies B1 à B5.
+
 **Itération guidée par la mesure (export).** La première version de l'export utilisait `pg-query-stream` (un objet
 par ligne dans un `Transform`, une écriture par ligne) : **11 req/s, soit pire que la v0** (11 000 petites
 écritures et 11 000 `JSON.stringify` par réponse). La version finale lit par lots de 2 000 lignes et sérialise chaque
@@ -549,6 +594,8 @@ lot en un seul appel : **×2,3** sur cette version intermédiaire, pour une mém
 | `data-1y` | 5,9 → 475 req/s (**×80**) | 178 → 5 ms | 5,8 → 487 req/s (**×84**) | 212 → 6 ms | 8,8 s → 30 ms |
 | `data-full` | 9,2 → 32 req/s (×3,5) | 104 → 62 ms | 10 → 22 req/s (×2,2) | 136 → 91 ms | 4,5 s → 58 ms |
 | `hot` | 7,6 → 897 req/s (**×118**) | 115 → 4 ms | 9,1 → 900 req/s (×99) | 114 → 4 ms | 5,4 s → 21 ms |
+
+> **En clair.** Sans changer de serveur ni de base de données, en modifiant uniquement le code, l'application traite jusqu'à 148 fois plus de demandes. Un utilisateur qui consulte une année obtient sa réponse en 4 à 5 millièmes de seconde au lieu de 2 dixièmes, et le serveur n'est plus jamais bloqué plus de quelques centièmes de seconde. Seule la moyenne sur 30 ans du grand jeu de données progresse moins : elle révèle la limite suivante, qui se situe dans la base de données elle-même.
 
 Mémoire maximale : ~415 Mo → 210-310 Mo. L'event loop n'est plus jamais bloqué plus de quelques dizaines de ms.
 
@@ -575,6 +622,8 @@ Les lectures longues (historique complet) bénéficient le plus de l'index couvr
 lectures courtes étaient déjà rapides côté base ; leur limite est désormais le CPU de Node (≈ 100 %). Point important
 pour la **scalabilité** : après v2, les performances sur L (11 M lignes) rejoignent celles de S (1,1 M lignes).
 
+> **En clair.** La réorganisation des données (détaillée au chapitre 4) profite surtout aux questions portant sur de longues périodes dans une base volumineuse : la moyenne sur 30 ans devient 11 fois plus rapide sur le grand jeu de données. Surtout, l'application se comporte désormais de la même façon avec 1 million ou 11 millions de relevés : la croissance de l'historique ne dégrade plus le service.
+
 ### 3.3 Étape v3 — Cache applicatif Redis (`v3-cache`)
 
 Conception ([`src/cache.ts`](../src/cache.ts), [`service.ts`](../src/weather/service.ts)) :
@@ -597,6 +646,8 @@ Conception ([`src/cache.ts`](../src/cache.ts), [`service.ts`](../src/weather/ser
 - **Compromis assumé** : une lecture concurrente d'une écriture peut ré-insérer une valeur obsolète, bornée par le
   TTL ; acceptable pour des données historiques (voir recommandations).
 
+> **En clair.** Le cache fonctionne comme un aide-mémoire : lorsqu'une question a déjà été posée (par exemple « moyenne de juillet 2023 à Lyon »), la réponse est conservée et resservie immédiatement, sans solliciter la base de données. Dès qu'un nouveau relevé arrive pour une ville, toutes les réponses mémorisées pour cette ville sont effacées, afin de ne jamais servir une information périmée. Si le cache tombe en panne, l'application continue de fonctionner normalement, simplement un peu moins vite.
+
 **Gain mesuré (v2 → v3)** — le résultat dépend, comme attendu, de la **répétition des requêtes** :
 
 | Scénario | Clés distinctes possibles | S : débit | L : débit |
@@ -606,6 +657,8 @@ Conception ([`src/cache.ts`](../src/cache.ts), [`service.ts`](../src/weather/ser
 | `avg-1y` (ville × année aléatoires) | 3 000 (S) / 30 000 (L) | 969 → 1 570 req/s (×1,6) | 937 → 860 req/s (**−8 %**) |
 | `data-1y` | 3 000 / 30 000 | 512 → 1 207 req/s (×2,4) | 493 → 483 req/s (−2 %) |
 | `data-full` (export, non mis en cache) | — | 33 → 34 req/s | 33 → 33 req/s |
+
+> **En clair.** Le cache est d'autant plus efficace que les mêmes questions reviennent souvent. C'est le cas du trafic réel (scénario « requêtes populaires ») et des moyennes sur 30 ans : le débit y est multiplié par 1,5 à 3,7. En revanche, lorsque chaque question est presque unique (une ville et une année tirées au hasard parmi 30 000 combinaisons), le cache sert rarement et ajoute un léger surcoût. Ce compromis est assumé et suivi grâce à un indicateur de « taux de succès » du cache.
 
 **Analyse honnête** : sur L, avec des périodes tirées au hasard parmi 30 000 combinaisons, le cache est rarement
 touché pendant les 30 s de mesure ; chaque défaut ajoute un aller-retour Redis et une écriture : **coût d'environ
@@ -628,6 +681,8 @@ ressource la plus difficile à faire évoluer horizontalement.
 | ESLint (typescript-eslint + **sonarjs**, complexité cognitive ≤ 10) : 0 erreur ; dépendances inutiles retirées (axios, dayjs, body-parser, winston, morgan, zod-express-middleware) ; zod 4 ; **0 vulnérabilité** en production (15 avant) | P16 | [`.eslintrc.json`](../.eslintrc.json) |
 | **Tests** : 18 tests Jest (DTO, service avec doubles, intégration supertest sur base migrée + Redis réels) | P16 | [`test/`](../test) |
 
+> **En clair.** Cette dernière étape prépare l'application à la production. Le serveur exploite désormais plusieurs cœurs du processeur au lieu d'un seul, démarre plus vite et consomme moins de mémoire. Il s'arrête proprement lors d'une mise à jour, sans interrompre les demandes en cours. Enfin, des indicateurs de suivi (temps de réponse, erreurs, charge) et des tests automatiques permettent de détecter une dégradation avant que les clients ne la constatent.
+
 **Gain mesuré (v3 → v4)** :
 
 | | v3 (ts-node, winston, 1 processus) | v4 (compilé, pino, 1 processus) | v4 cluster (4 processus) |
@@ -642,6 +697,8 @@ ressource la plus difficile à faire évoluer horizontalement.
 | Démarrage / RSS au repos | 4,6 s / 231 Mo (ts-node) | **2,0 s / 79 Mo** | — |
 
 (Les gains du cluster sont calculés par rapport à v4 en 1 processus.)
+
+> **En clair.** Utiliser 4 cœurs au lieu d'un multiplie la capacité par 2,6 à 4,1 : l'application peut désormais grandir simplement en ajoutant de la puissance de calcul. La compilation préalable du code divise par plus de deux le temps de démarrage et réduit la mémoire de 43 %, ce qui permet de faire fonctionner davantage d'instances sur un même serveur.
 
 - **Cluster** : gain quasi linéaire (×2,6 à ×4,1 avec 4 workers) ; quand il est inférieur à ×4 (`data-1y` sur L),
   c'est la base (limitée à 4 CPU) qui devient le facteur limitant.
@@ -703,6 +760,8 @@ CREATE FUNCTION weather_ensure_partition(year) ...  -- maintenance des partition
 | `VACUUM (ANALYZE)` dans une migration séparée (hors transaction) | remplit la *visibility map* : les index-only scans sont effectifs immédiatement |
 | Ancienne table **conservée** (`weather_legacy`) | retour arrière possible (migration `down` qui recopie aussi les données écrites depuis) |
 
+> **En clair.** La nouvelle organisation des données repose sur quatre idées : (1) chaque ville reçoit un numéro court au lieu de répéter son nom des millions de fois ; (2) les relevés sont rangés par année, comme dans des classeurs annuels, pour ne consulter que les années utiles ; (3) l'index — le « sommaire » de la table — contient directement les températures, ce qui évite d'aller chercher chaque relevé un par un ; (4) les relevés d'une même ville sont regroupés physiquement. L'ancienne table est conservée tant que la migration n'est pas validée, ce qui permet un retour arrière.
+
 ### 4.2 Déroulé et durée
 
 | Étape (migration `1731360000001`) | Remarque |
@@ -718,6 +777,8 @@ CREATE FUNCTION weather_ensure_partition(year) ...  -- maintenance des partition
 |---|---:|---:|---:|---:|---:|
 | S | 1 095 800 | 20,8 s | 96 Mo | 98 Mo | +2 % |
 | L | 10 958 000 | **82,8 s** | 1 064 Mo | 970 Mo | **−9 %** |
+
+> **En clair.** La migration des 11 millions de relevés prend moins d'une minute et demie, et l'espace disque occupé reste stable (il diminue même de 9 % sur le grand jeu de données). L'opération est donc compatible avec une courte fenêtre de maintenance.
 
 La taille totale varie peu : l'index couvrant duplique la température et l'humidité, ce que compense la suppression
 de la chaîne `location` dans chaque ligne et chaque entrée d'index. **Le gain ne vient pas du volume mais de la
@@ -737,6 +798,8 @@ localité** : les données utiles à une requête sont regroupées dans quelques
 | S | historique complet | migré | 1,28 ms | 8,4 ms (×2,5) | 151 | 27 |
 | S | 1 an | d'origine | 0,11 ms | 0,72 ms | 273 | 0,5 |
 | S | 1 an | migré | 0,23 ms | 0,27 ms (×2,7) | 6 | 0 |
+
+> **En clair.** Pour répondre à une question sur 30 ans d'historique, la base lit désormais 60 fois moins de données et répond 7 fois plus vite. Pour une question sur une année, elle ne lit plus que quelques pages au lieu de plusieurs centaines. Ces gains s'additionnent à ceux obtenus côté serveur.
 
 Plan après migration (historique complet d'une ville) : `Index Only Scan using weather_y1995_pkey ... Heap Fetches: 0`
 sur chacune des 30 partitions, ~5 pages par partition.
@@ -763,6 +826,8 @@ elles ne seraient pas copiées). Pour un volume réel plus important, la procéd
 5. **Bascule** : déploiement du code v2+ (lecture sur la nouvelle table) ;
 6. **Contract** : après une période d'observation, suppression du trigger puis de `weather_legacy`.
 
+> **En clair.** Pour une base de production beaucoup plus volumineuse, la migration peut se faire progressivement et sans interruption de service : la nouvelle structure est remplie en arrière-plan pendant que l'ancienne continue de fonctionner, puis l'application bascule une fois les données vérifiées.
+
 **Maintenance continue des partitions** : l'application crée au démarrage les partitions de l'année en cours et de
 la suivante (`weather_ensure_partition`) ; en production, un job planifié (pg_cron ou pg_partman) est préférable.
 Les mesures hors des partitions existantes ne sont jamais rejetées (partition `DEFAULT`).
@@ -786,6 +851,8 @@ Les mesures hors des partitions existantes ne sont jamais rejetées (partition `
 | Requêtes populaires (mix) | S | 7,6 | 4 991 | **×657** | 7 096 ms | 17 ms | 115 ms | 2 ms |
 | Requêtes populaires (mix) | L | 9,1 | 5 084 | **×559** | 6 059 ms | 17 ms | 114 ms | 2 ms |
 
+> **En clair.** Ce tableau compare directement la version d'origine et la version finale. Sur les analyses et les consultations courantes, la capacité est multipliée par 237 à 859, et le temps de réponse sous affluence passe de plusieurs secondes à quelques centièmes de seconde. L'export complet de l'historique progresse plus modestement (×11), car son coût est dominé par le volume de données à transmettre ; il reste néanmoins sous la seconde pour 99 % des demandes.
+
 ![Débit par version, jeu S](assets/chart-throughput-S.png)
 
 ![Débit par version, jeu L](assets/chart-throughput-L.png)
@@ -795,6 +862,8 @@ Les mesures hors des partitions existantes ne sont jamais rejetées (partition `
 ![Latence p99 par version, jeu L](assets/chart-p99-L.png)
 
 *Échelle logarithmique : chaque graduation est un facteur 10.*
+
+> **En clair.** Les graphiques montrent, pour chaque scénario, l'évolution version après version. L'échelle verticale est logarithmique : chaque graduation représente une multiplication par 10, ce qui permet d'afficher sur un même graphique des valeurs allant de 6 à plus de 5 000. Le débit (graphiques du haut) doit monter, la latence (graphiques du bas) doit descendre. On distingue nettement le saut opéré dès la première étape (barre orange), puis les gains successifs jusqu'à la version finale (barre violette).
 
 **Contribution de chaque étape** (jeu L, débit sous charge) :
 
@@ -824,6 +893,8 @@ tout par le nombre de cœurs.
 | Journalisation | < 1 % | ~17 % | < 1 % | < 1 % |
 | Débit correspondant | 6 req/s | 1 625 req/s | 9 req/s | 33 req/s |
 
+> **En clair.** Avant optimisation, le processeur était monopolisé par des tâches inutiles (dates, vérifications, mise en forme de données superflues). Après optimisation, ces postes ont disparu : l'essentiel du temps est désormais consacré au traitement normal des échanges réseau (recevoir la demande, envoyer la réponse). C'est le signe que le code ne gaspille plus de ressources ; les gains futurs passeront surtout par l'infrastructure.
+
 ![Flamegraph v4 avg-1y](assets/flame-v4-avg-1y.png)
 
 *v4 (1 processus), `avg-1y` : il n'y a plus de « bloc » dominant ; le temps est réparti entre la pile HTTP de Node,
@@ -851,6 +922,8 @@ le travail est proportionnel aux données réellement envoyées, sans objet `Dat
 | ESLint (typescript-eslint + sonarjs) | non applicable (pas de support TS) | 0 erreur, 0 avertissement |
 | Métriques de production | aucune | latence par route, event loop, pool, cache, CPU, mémoire, GC |
 
+> **En clair.** Au-delà de la vitesse, l'application est plus sobre (deux fois moins de mémoire), plus fiable (plus aucune erreur sous charge ni anomalie connue), plus sûre (aucune faille connue dans ses composants, contre 15 auparavant) et mieux surveillée. Les 18 tests automatiques et la comparaison systématique avec la version d'origine garantissent que les résultats fournis aux clients sont restés exacts.
+
 ![Tableau de bord Grafana, v4 cluster sous charge](assets/grafana-v4-cluster.png)
 
 *Tableau de bord Grafana provisionné ([`monitoring/`](../monitoring)), v4 en cluster (4 workers) sur le jeu L pendant
@@ -858,123 +931,11 @@ une charge mixte : débit par route, latences p95/p99 (< 50 ms), event loop p99 
 (84 % sur ce mélange de requêtes), connexions du pool PostgreSQL (4 × 10), aucune erreur 5xx, mémoire et CPU cumulés
 des workers. Les débits affichés sont des moyennes glissantes sur 1 minute.*
 
+> **En clair.** Ce tableau de bord permet à l'équipe d'exploitation de suivre en temps réel la santé de l'application : nombre de demandes, temps de réponse, erreurs, efficacité du cache et consommation de ressources. Toute dégradation devient visible immédiatement, sans attendre les réclamations des clients.
+
 ### 5.4 Détail complet des mesures
 
-Toutes les valeurs brutes (y compris chaque répétition) sont dans `bench/results/<version>-<jeu>.json`.
-
-#### Jeu de données S (≈1,1 M lignes, 100 villes)
-
-##### Moyenne, historique complet (30 ans) (`avg-full`)
-
-| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| v0 original | 17,3 | — | 2 682 ms | 5 151 ms | 64 ms | 0 | 2 827 ms | 134 % | 408 Mo |
-| v1 SQL | 174,2 | ×10 | 290 ms | 385 ms | 19 ms | 0 | 23,7 ms | 44 % | 242 Mo |
-| v2 schéma | 522,2 | ×30 | 95 ms | 152 ms | 9 ms | 0 | 24,4 ms | 72 % | 278 Mo |
-| v3 cache | 1 762,7 | ×102 | 27 ms | 52 ms | 2 ms | 0 | 35,7 ms | 105 % | 289 Mo |
-| v4 runtime (1 proc.) | 1 679,2 | ×97 | 28 ms | 54 ms | 2 ms | 0 | 36,3 ms | 103 % | 166 Mo |
-| v4 cluster (4 proc.) | 5 505,6 | ×318 | 8 ms | 16 ms | 2 ms | 0 | 17,8 ms | 424 % | 602 Mo |
-
-##### Moyenne, 1 an (`avg-1y`)
-
-| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| v0 original | 6 | — | 5 208 ms | 8 414 ms | 163 ms | 0 | 8 376 ms | 112 % | 416 Mo |
-| v1 SQL | 866,3 | ×144 | 56 ms | 80 ms | 4 ms | 0 | 22,7 ms | 107 % | 212 Mo |
-| v2 schéma | 968,7 | ×161 | 50 ms | 76 ms | 3 ms | 0 | 21,3 ms | 103 % | 248 Mo |
-| v3 cache | 1 569,5 | ×262 | 30 ms | 54 ms | 3 ms | 0 | 35,6 ms | 102 % | 292 Mo |
-| v4 runtime (1 proc.) | 1 624,8 | ×271 | 30 ms | 52 ms | 3 ms | 0 | 37,4 ms | 101 % | 169 Mo |
-| v4 cluster (4 proc.) | 5 155,6 | ×859 | 9 ms | 17 ms | 2 ms | 0 | 18,9 ms | 420 % | 609 Mo |
-
-#### Données brutes, 1 an (`data-1y`)
-
-| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| v0 original | 5,9 | — | 5 084 ms | 8 468 ms | 178 ms | 0 | 8 808 ms | 107 % | 417 Mo |
-| v1 SQL | 474,8 | ×80 | 104 ms | 146 ms | 5 ms | 0 | 30,2 ms | 108 % | 217 Mo |
-| v2 schéma | 512 | ×87 | 95 ms | 136 ms | 4 ms | 0 | 29,6 ms | 102 % | 253 Mo |
-| v3 cache | 1 207,1 | ×205 | 40 ms | 67 ms | 6 ms | 0 | 38,1 ms | 103 % | 309 Mo |
-| v4 runtime (1 proc.) | 1 316,6 | ×223 | 36 ms | 62 ms | 6 ms | 0 | 34,7 ms | 104 % | 188 Mo |
-| v4 cluster (4 proc.) | 3 414,8 | ×579 | 14 ms | 25 ms | 3 ms | 0 | 20,9 ms | 404 % | 674 Mo |
-
-##### Export historique complet (`data-full`)
-
-| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| v0 original | 9,2 | — | 4 443 ms | 6 035 ms | 104 ms | 0 | 4 450,2 ms | 118 % | 419 Mo |
-| v1 SQL | 31,9 | ×3,5 | 1 501 ms | 1 791 ms | 62 ms | 0 | 57,7 ms | 119 % | 312 Mo |
-| v2 schéma | 33 | ×3,6 | 1 459 ms | 1 593 ms | 46 ms | 0 | 61,8 ms | 113 % | 304 Mo |
-| v3 cache | 33,9 | ×3,7 | 1 436 ms | 1 535 ms | 45 ms | 0 | 59,4 ms | 121 % | 354 Mo |
-| v4 runtime (1 proc.) | 32,9 | ×3,6 | 1 459 ms | 1 646 ms | 46 ms | 0 | 56,3 ms | 121 % | 224 Mo |
-| v4 cluster (4 proc.) | 108 | ×12 | 380 ms | 744 ms | 45 ms | 0 | 67,7 ms | 456 % | 866 Mo |
-
-#### Requêtes populaires (mix) (`hot`)
-
-| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| v0 original | 7,6 | — | 4 945 ms | 7 096 ms | 115 ms | 0 | 5 360,3 ms | 114 % | 417 Mo |
-| v1 SQL | 897 | ×118 | 54 ms | 80 ms | 4 ms | 0 | 20,9 ms | 101 % | 286 Mo |
-| v2 schéma | 897,3 | ×118 | 54 ms | 86 ms | 3 ms | 0 | 22,2 ms | 99 % | 283 Mo |
-| v3 cache | 1 611,6 | ×212 | 30 ms | 51 ms | 2 ms | 0 | 38,9 ms | 103 % | 331 Mo |
-| v4 runtime (1 proc.) | 1 577,4 | ×208 | 30 ms | 53 ms | 2 ms | 0 | 37,6 ms | 99 % | 206 Mo |
-| v4 cluster (4 proc.) | 4 991,2 | ×657 | 9 ms | 17 ms | 2 ms | 0 | 18,2 ms | 418 % | 678 Mo |
-
-#### Jeu de données L (≈11 M lignes, 1 000 villes)
-
-##### Moyenne, historique complet (30 ans) (`avg-full`)
-
-| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| v0 original | 16,8 | — | 2 724 ms | 5 605 ms | 107 ms | 0 | 2 696,9 ms | 131 % | 429 Mo |
-| v1 SQL | 43,1 | ×2,6 | 1 071 ms | 1 967 ms | 55 ms | 0 | 22,5 ms | 14 % | 205 Mo |
-| v2 schéma | 492,2 | ×29 | 99 ms | 160 ms | 15 ms | 0 | 24,6 ms | 64 % | 250 Mo |
-| v3 cache | 1 826,9 | ×109 | 26 ms | 48 ms | 3 ms | 0 | 34,4 ms | 115 % | 326 Mo |
-| v4 runtime (1 proc.) | 1 744 | ×104 | 27 ms | 51 ms | 3 ms | 0 | 36,8 ms | 104 % | 165 Mo |
-| v4 cluster (4 proc.) | 5 076,3 | ×302 | 9 ms | 19 ms | 2 ms | 0 | 19,8 ms | 463 % | 609 Mo |
-
-##### Moyenne, 1 an (`avg-1y`)
-
-| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| v0 original | 5,9 | — | 5 346 ms | 8 301 ms | 210 ms | 9 | 7 998,5 ms | 110 % | 427 Mo |
-| v1 SQL | 872,8 | ×148 | 56 ms | 77 ms | 5 ms | 0 | 21,2 ms | 101 % | 246 Mo |
-| v2 schéma | 936,6 | ×159 | 51 ms | 83 ms | 3 ms | 0 | 23,7 ms | 99 % | 248 Mo |
-| v3 cache | 860,1 | ×146 | 66 ms | 102 ms | 5 ms | 0 | 30,3 ms | 102 % | 295 Mo |
-| v4 runtime (1 proc.) | 827,9 | ×140 | 67 ms | 115 ms | 5 ms | 0 | 37,6 ms | 104 % | 166 Mo |
-| v4 cluster (4 proc.) | 3 390,2 | ×575 | 13 ms | 29 ms | 6 ms | 0 | 19,3 ms | 423 % | 620 Mo |
-
-#### Données brutes, 1 an (`data-1y`)
-
-| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| v0 original | 5,8 | — | 5 155 ms | 8 541 ms | 212 ms | 7 | 8 933,9 ms | 106 % | 427 Mo |
-| v1 SQL | 487,1 | ×84 | 101 ms | 130 ms | 6 ms | 0 | 27 ms | 100 % | 254 Mo |
-| v2 schéma | 492,8 | ×85 | 99 ms | 132 ms | 4 ms | 0 | 29,7 ms | 99 % | 256 Mo |
-| v3 cache | 482,9 | ×83 | 117 ms | 159 ms | 6 ms | 0 | 43,4 ms | 104 % | 302 Mo |
-| v4 runtime (1 proc.) | 497,2 | ×86 | 112 ms | 162 ms | 6 ms | 0 | 45,4 ms | 105 % | 178 Mo |
-| v4 cluster (4 proc.) | 1 375,3 | ×237 | 37 ms | 56 ms | 7 ms | 0 | 27,8 ms | 398 % | 674 Mo |
-
-##### Export historique complet (`data-full`)
-
-| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| v0 original | 10 | — | 4 616 ms | 8 813 ms | 136 ms | 0 | 4 563,4 ms | 122 % | 441 Mo |
-| v1 SQL | 22,1 | ×2,2 | 2 033 ms | 2 897 ms | 91 ms | 0 | 50,4 ms | 84 % | 303 Mo |
-| v2 schéma | 32,9 | ×3,3 | 1 431 ms | 1 665 ms | 46 ms | 0 | 57,4 ms | 122 % | 304 Mo |
-| v3 cache | 33 | ×3,3 | 1 439 ms | 1 695 ms | 48 ms | 0 | 56,8 ms | 115 % | 349 Mo |
-| v4 runtime (1 proc.) | 33,9 | ×3,4 | 1 411 ms | 1 545 ms | 44 ms | 0 | 70,4 ms | 120 % | 231 Mo |
-| v4 cluster (4 proc.) | 107,7 | ×11 | 387 ms | 752 ms | 46 ms | 0 | 76,2 ms | 460 % | 904 Mo |
-
-#### Requêtes populaires (mix) (`hot`)
-
-| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| v0 original | 9,1 | — | 5 177 ms | 6 059 ms | 114 ms | 0 | 5 653,9 ms | 115 % | 439 Mo |
-| v1 SQL | 899,9 | ×99 | 53 ms | 86 ms | 4 ms | 0 | 19,3 ms | 102 % | 274 Mo |
-| v2 schéma | 944,1 | ×104 | 51 ms | 84 ms | 3 ms | 0 | 22,2 ms | 103 % | 283 Mo |
-| v3 cache | 1 418,3 | ×156 | 34 ms | 72 ms | 2 ms | 0 | 41,3 ms | 104 % | 333 Mo |
-| v4 runtime (1 proc.) | 1 568,3 | ×172 | 30 ms | 56 ms | 2 ms | 0 | 40,7 ms | 100 % | 207 Mo |
-| v4 cluster (4 proc.) | 5 084 | ×559 | 9 ms | 17 ms | 2 ms | 0 | 18,2 ms | 426 % | 703 Mo |
+Le détail de toutes les mesures (six versions × cinq scénarios × deux jeux de données) est présenté en **annexe 8.4**, accompagné d'une lecture commentée de chaque tableau.
 
 ---
 
@@ -995,6 +956,8 @@ couvert par un test ([`test/api.test.ts`](../test/api.test.ts)) et documenté da
 | Ville inconnue | `200` + `null` | **`404`** | gérer le 404 |
 | `POST /data` | 1 mesure ; doublon → 500 | 1 mesure **ou un tableau** (≤ 5 000) ; doublon → mise à jour (200) | regrouper les envois |
 | Paramètre invalide | 400 | 400 (même format `[{type, errors: {issues, name}}]`) | — |
+
+> **En clair.** Quelques comportements de l'API ont été rendus plus cohérents : les dates sont renvoyées sous la forme d'un simple jour (« 2023-12-23 »), une période « du 1er au 31 » inclut bien ses deux bornes, une ville inconnue est signalée explicitement et les résultats volumineux sont découpés en pages. Ces changements demandent une adaptation mineure des applications clientes ; l'action attendue est indiquée pour chacun d'eux et l'ensemble est documenté dans le guide d'utilisation de l'API.
 
 La non-régression fonctionnelle a été vérifiée **automatiquement** : 1 170 comparaisons entre la v0 (schéma d'origine)
 et la version finale (schéma migré) sur des villes et périodes aléatoires (avg, min, max et données brutes, en
@@ -1024,7 +987,11 @@ normalisant uniquement les changements volontaires ci-dessus) : **0 différence*
 | R13 | **Logs d'accès désactivés ou échantillonnés** en production (`ACCESS_LOG=false`), la durée et le statut par route étant déjà couverts par les métriques ; logs applicatifs conservés | mesuré : +4 à +8 % de débit (§ 3.4) | trivial |
 | R14 | **Framework HTTP plus léger** (Fastify : routage par arbre, sérialisation JSON compilée à partir d'un schéma) | après optimisation, ~65 % du CPU restant est la pile HTTP de Node + Express (§ 5.2) | gain attendu ×1,5 à ×2 par cœur ; moyen (réécriture de la couche contrôleur uniquement) |
 
+> **En clair.** Ces recommandations dessinent une feuille de route. À court terme et pour un effort faible : régler la configuration de la base de données (R5), réduire le volume de journaux (R13), conserver plus longtemps en cache les périodes passées (R6) et contrôler automatiquement les performances à chaque évolution du code (R9). À moyen terme : pré-calculer les statistiques mensuelles (R1), déporter les exports volumineux (R2) et sécuriser l'arrivée des données (R3). À plus long terme, l'infrastructure pourra évoluer vers un déploiement élastique et une supervision complète (R4, R7, R8).
+
 ### 7.2 Bonnes pratiques pour éviter que ces problèmes réapparaissent
+
+> **En clair.** Les problèmes rencontrés ne sont pas propres à WeatherTrack Pro : ils apparaissent dans la plupart des applications dont le volume de données croît plus vite que prévu. Les bonnes pratiques ci-dessous visent à éviter qu'ils ne se reproduisent.
 
 **Développement applicatif (Node.js)**
 
@@ -1108,10 +1075,159 @@ Supervision : `docker compose --profile monitoring up -d` puis Grafana sur http:
 
 ### 8.3 Glossaire
 
-- **p50 / p99** : latence en dessous de laquelle se trouvent 50 % / 99 % des requêtes.
+- **API** : interface par laquelle les applications clientes interrogent WeatherTrack Pro (une adresse web par type de question).
+- **Cache** : mémoire rapide qui conserve les réponses déjà calculées pour les resservir sans refaire le calcul (ici, Redis).
+- **Cache-aside** : l'application lit le cache, sinon la base, puis alimente le cache.
+- **Cluster / processus / cœur** : un processeur comporte plusieurs cœurs ; lancer plusieurs processus de l'application (cluster) permet de les utiliser tous en parallèle.
+- **Débit (req/s)** : nombre de demandes traitées par seconde.
 - **Event loop lag** : retard de l'unique boucle d'exécution de Node.js ; s'il vaut 5 s, **toutes** les requêtes
   attendent au moins 5 s.
+- **Flamegraph** : représentation graphique du temps processeur, où la largeur de chaque bloc est proportionnelle au temps consommé.
+- **Index** : « sommaire » d'une table qui permet de retrouver rapidement des lignes sans tout parcourir.
 - **Index-only scan** : PostgreSQL répond uniquement à partir de l'index, sans lire la table.
 - **Keyset pagination** : pagination par « valeur de la dernière ligne vue » au lieu d'un `OFFSET`.
-- **Cache-aside** : l'application lit le cache, sinon la base, puis alimente le cache.
+- **Latence** : temps écoulé entre une demande et sa réponse.
+- **Migration** : transformation contrôlée et versionnée de la structure d'une base de données et de son contenu.
+- **p50 / p99** : latence en dessous de laquelle se trouvent 50 % / 99 % des requêtes.
+- **Partition** : sous-ensemble d'une table (ici, une année de relevés) que la base peut consulter séparément.
+- **Requête** : une demande adressée à l'API (ou à la base de données).
+- **Sérialisation** : mise en forme des données (ici en JSON) avant leur envoi sur le réseau.
 - **Single-flight** : regroupement des requêtes identiques simultanées en une seule exécution.
+
+### 8.4 Détail complet des mesures
+
+Cette annexe reprend, pour chaque scénario et chaque jeu de données, l'ensemble des mesures relevées pour les six versions de l'application. Les valeurs sont des médianes de trois mesures de 10 secondes avec 50 utilisateurs simultanés ; la colonne « Gain vs v0 » indique le facteur d'amélioration par rapport à la version d'origine. Les fichiers bruts (y compris chaque répétition) se trouvent dans `bench/results/`.
+
+#### Jeu de données S (≈1,1 M lignes, 100 villes)
+
+##### Moyenne, historique complet (30 ans) (`avg-full`)
+
+> **En clair.** La moyenne sur 30 ans progresse à chaque étape : le calcul confié à la base (v1), la réorganisation des données (v2) et le cache (v3) apportent chacun un gain net, que le passage à 4 processus multiplie encore.
+
+| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| v0 original | 17,3 | — | 2 682 ms | 5 151 ms | 64 ms | 0 | 2 827 ms | 134 % | 408 Mo |
+| v1 SQL | 174,2 | ×10 | 290 ms | 385 ms | 19 ms | 0 | 23,7 ms | 44 % | 242 Mo |
+| v2 schéma | 522,2 | ×30 | 95 ms | 152 ms | 9 ms | 0 | 24,4 ms | 72 % | 278 Mo |
+| v3 cache | 1 762,7 | ×102 | 27 ms | 52 ms | 2 ms | 0 | 35,7 ms | 105 % | 289 Mo |
+| v4 runtime (1 proc.) | 1 679,2 | ×97 | 28 ms | 54 ms | 2 ms | 0 | 36,3 ms | 103 % | 166 Mo |
+| v4 cluster (4 proc.) | 5 505,6 | ×318 | 8 ms | 16 ms | 2 ms | 0 | 17,8 ms | 424 % | 602 Mo |
+
+##### Moyenne, 1 an (`avg-1y`)
+
+> **En clair.** L'essentiel du gain est obtenu dès la v1 (×144), grâce à la suppression du filtrage des dates côté serveur ; les étapes suivantes l'amplifient.
+
+| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| v0 original | 6 | — | 5 208 ms | 8 414 ms | 163 ms | 0 | 8 376 ms | 112 % | 416 Mo |
+| v1 SQL | 866,3 | ×144 | 56 ms | 80 ms | 4 ms | 0 | 22,7 ms | 107 % | 212 Mo |
+| v2 schéma | 968,7 | ×161 | 50 ms | 76 ms | 3 ms | 0 | 21,3 ms | 103 % | 248 Mo |
+| v3 cache | 1 569,5 | ×262 | 30 ms | 54 ms | 3 ms | 0 | 35,6 ms | 102 % | 292 Mo |
+| v4 runtime (1 proc.) | 1 624,8 | ×271 | 30 ms | 52 ms | 3 ms | 0 | 37,4 ms | 101 % | 169 Mo |
+| v4 cluster (4 proc.) | 5 155,6 | ×859 | 9 ms | 17 ms | 2 ms | 0 | 18,9 ms | 420 % | 609 Mo |
+
+##### Données brutes, 1 an (`data-1y`)
+
+> **En clair.** Même profil que la moyenne sur un an : la v1 apporte l'essentiel, le cache double ensuite le débit et le cluster le triple.
+
+| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| v0 original | 5,9 | — | 5 084 ms | 8 468 ms | 178 ms | 0 | 8 808 ms | 107 % | 417 Mo |
+| v1 SQL | 474,8 | ×80 | 104 ms | 146 ms | 5 ms | 0 | 30,2 ms | 108 % | 217 Mo |
+| v2 schéma | 512 | ×87 | 95 ms | 136 ms | 4 ms | 0 | 29,6 ms | 102 % | 253 Mo |
+| v3 cache | 1 207,1 | ×205 | 40 ms | 67 ms | 6 ms | 0 | 38,1 ms | 103 % | 309 Mo |
+| v4 runtime (1 proc.) | 1 316,6 | ×223 | 36 ms | 62 ms | 6 ms | 0 | 34,7 ms | 104 % | 188 Mo |
+| v4 cluster (4 proc.) | 3 414,8 | ×579 | 14 ms | 25 ms | 3 ms | 0 | 20,9 ms | 404 % | 674 Mo |
+
+##### Export historique complet (`data-full`)
+
+> **En clair.** L'export complet reste l'opération la plus coûteuse, car il transmet environ 11 000 relevés par demande ; sa progression vient surtout de l'envoi par lots (v1) et de l'utilisation de plusieurs cœurs (v4).
+
+| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| v0 original | 9,2 | — | 4 443 ms | 6 035 ms | 104 ms | 0 | 4 450,2 ms | 118 % | 419 Mo |
+| v1 SQL | 31,9 | ×3,5 | 1 501 ms | 1 791 ms | 62 ms | 0 | 57,7 ms | 119 % | 312 Mo |
+| v2 schéma | 33 | ×3,6 | 1 459 ms | 1 593 ms | 46 ms | 0 | 61,8 ms | 113 % | 304 Mo |
+| v3 cache | 33,9 | ×3,7 | 1 436 ms | 1 535 ms | 45 ms | 0 | 59,4 ms | 121 % | 354 Mo |
+| v4 runtime (1 proc.) | 32,9 | ×3,6 | 1 459 ms | 1 646 ms | 46 ms | 0 | 56,3 ms | 121 % | 224 Mo |
+| v4 cluster (4 proc.) | 108 | ×12 | 380 ms | 744 ms | 45 ms | 0 | 67,7 ms | 456 % | 866 Mo |
+
+##### Requêtes populaires (mix) (`hot`)
+
+> **En clair.** Avec un petit nombre de questions très demandées, le cache (v3) joue pleinement son rôle ; le cluster porte la capacité à près de 5 000 demandes par seconde.
+
+| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| v0 original | 7,6 | — | 4 945 ms | 7 096 ms | 115 ms | 0 | 5 360,3 ms | 114 % | 417 Mo |
+| v1 SQL | 897 | ×118 | 54 ms | 80 ms | 4 ms | 0 | 20,9 ms | 101 % | 286 Mo |
+| v2 schéma | 897,3 | ×118 | 54 ms | 86 ms | 3 ms | 0 | 22,2 ms | 99 % | 283 Mo |
+| v3 cache | 1 611,6 | ×212 | 30 ms | 51 ms | 2 ms | 0 | 38,9 ms | 103 % | 331 Mo |
+| v4 runtime (1 proc.) | 1 577,4 | ×208 | 30 ms | 53 ms | 2 ms | 0 | 37,6 ms | 99 % | 206 Mo |
+| v4 cluster (4 proc.) | 4 991,2 | ×657 | 9 ms | 17 ms | 2 ms | 0 | 18,2 ms | 418 % | 678 Mo |
+
+#### Jeu de données L (≈11 M lignes, 1 000 villes)
+
+##### Moyenne, historique complet (30 ans) (`avg-full`)
+
+> **En clair.** Sur le grand jeu de données, la v1 seule reste freinée par la base (×2,6) ; c'est la réorganisation des données (v2) qui débloque la situation (×29), avant le cache et le cluster.
+
+| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| v0 original | 16,8 | — | 2 724 ms | 5 605 ms | 107 ms | 0 | 2 696,9 ms | 131 % | 429 Mo |
+| v1 SQL | 43,1 | ×2,6 | 1 071 ms | 1 967 ms | 55 ms | 0 | 22,5 ms | 14 % | 205 Mo |
+| v2 schéma | 492,2 | ×29 | 99 ms | 160 ms | 15 ms | 0 | 24,6 ms | 64 % | 250 Mo |
+| v3 cache | 1 826,9 | ×109 | 26 ms | 48 ms | 3 ms | 0 | 34,4 ms | 115 % | 326 Mo |
+| v4 runtime (1 proc.) | 1 744 | ×104 | 27 ms | 51 ms | 3 ms | 0 | 36,8 ms | 104 % | 165 Mo |
+| v4 cluster (4 proc.) | 5 076,3 | ×302 | 9 ms | 19 ms | 2 ms | 0 | 19,8 ms | 463 % | 609 Mo |
+
+##### Moyenne, 1 an (`avg-1y`)
+
+> **En clair.** Gain massif dès la v1. Avec 30 000 combinaisons ville × année, le cache sert rarement et coûte quelques pourcents (v3), ce que le cluster compense largement.
+
+| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| v0 original | 5,9 | — | 5 346 ms | 8 301 ms | 210 ms | 9 | 7 998,5 ms | 110 % | 427 Mo |
+| v1 SQL | 872,8 | ×148 | 56 ms | 77 ms | 5 ms | 0 | 21,2 ms | 101 % | 246 Mo |
+| v2 schéma | 936,6 | ×159 | 51 ms | 83 ms | 3 ms | 0 | 23,7 ms | 99 % | 248 Mo |
+| v3 cache | 860,1 | ×146 | 66 ms | 102 ms | 5 ms | 0 | 30,3 ms | 102 % | 295 Mo |
+| v4 runtime (1 proc.) | 827,9 | ×140 | 67 ms | 115 ms | 5 ms | 0 | 37,6 ms | 104 % | 166 Mo |
+| v4 cluster (4 proc.) | 3 390,2 | ×575 | 13 ms | 29 ms | 6 ms | 0 | 19,3 ms | 423 % | 620 Mo |
+
+##### Données brutes, 1 an (`data-1y`)
+
+> **En clair.** Le débit plafonne autour de 500 demandes par seconde et par processus ; le cluster le porte à près de 1 400, la base de données devenant alors le facteur limitant.
+
+| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| v0 original | 5,8 | — | 5 155 ms | 8 541 ms | 212 ms | 7 | 8 933,9 ms | 106 % | 427 Mo |
+| v1 SQL | 487,1 | ×84 | 101 ms | 130 ms | 6 ms | 0 | 27 ms | 100 % | 254 Mo |
+| v2 schéma | 492,8 | ×85 | 99 ms | 132 ms | 4 ms | 0 | 29,7 ms | 99 % | 256 Mo |
+| v3 cache | 482,9 | ×83 | 117 ms | 159 ms | 6 ms | 0 | 43,4 ms | 104 % | 302 Mo |
+| v4 runtime (1 proc.) | 497,2 | ×86 | 112 ms | 162 ms | 6 ms | 0 | 45,4 ms | 105 % | 178 Mo |
+| v4 cluster (4 proc.) | 1 375,3 | ×237 | 37 ms | 56 ms | 7 ms | 0 | 27,8 ms | 398 % | 674 Mo |
+
+##### Export historique complet (`data-full`)
+
+> **En clair.** À partir de la v2, le comportement est identique à celui du petit jeu de données : la taille de la base n'influence plus le coût de l'export.
+
+| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| v0 original | 10 | — | 4 616 ms | 8 813 ms | 136 ms | 0 | 4 563,4 ms | 122 % | 441 Mo |
+| v1 SQL | 22,1 | ×2,2 | 2 033 ms | 2 897 ms | 91 ms | 0 | 50,4 ms | 84 % | 303 Mo |
+| v2 schéma | 32,9 | ×3,3 | 1 431 ms | 1 665 ms | 46 ms | 0 | 57,4 ms | 122 % | 304 Mo |
+| v3 cache | 33 | ×3,3 | 1 439 ms | 1 695 ms | 48 ms | 0 | 56,8 ms | 115 % | 349 Mo |
+| v4 runtime (1 proc.) | 33,9 | ×3,4 | 1 411 ms | 1 545 ms | 44 ms | 0 | 70,4 ms | 120 % | 231 Mo |
+| v4 cluster (4 proc.) | 107,7 | ×11 | 387 ms | 752 ms | 46 ms | 0 | 76,2 ms | 460 % | 904 Mo |
+
+##### Requêtes populaires (mix) (`hot`)
+
+> **En clair.** Le trafic réaliste bénéficie de toutes les étapes, jusqu'à plus de 5 000 demandes par seconde avec 4 processus.
+
+| Version | Débit (req/s) | Gain vs v0 | Latence p50 sous charge | p99 sous charge | Latence unitaire p50 | Erreurs | Event loop p99 | CPU | RSS max |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| v0 original | 9,1 | — | 5 177 ms | 6 059 ms | 114 ms | 0 | 5 653,9 ms | 115 % | 439 Mo |
+| v1 SQL | 899,9 | ×99 | 53 ms | 86 ms | 4 ms | 0 | 19,3 ms | 102 % | 274 Mo |
+| v2 schéma | 944,1 | ×104 | 51 ms | 84 ms | 3 ms | 0 | 22,2 ms | 103 % | 283 Mo |
+| v3 cache | 1 418,3 | ×156 | 34 ms | 72 ms | 2 ms | 0 | 41,3 ms | 104 % | 333 Mo |
+| v4 runtime (1 proc.) | 1 568,3 | ×172 | 30 ms | 56 ms | 2 ms | 0 | 40,7 ms | 100 % | 207 Mo |
+| v4 cluster (4 proc.) | 5 084 | ×559 | 9 ms | 17 ms | 2 ms | 0 | 18,2 ms | 426 % | 703 Mo |

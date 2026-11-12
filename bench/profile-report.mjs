@@ -115,7 +115,8 @@ if (opts.svg) {
   let maxDepth = 0;
   function layout(node, x, depth) {
     const w = (node.value / root.value) * W;
-    if (w < 0.4) return;
+    // Frames below ~0.3% of the CPU (4 px) are unreadable: not drawn (keeps the chart compact)
+    if (w < 4) return;
     maxDepth = Math.max(maxDepth, depth);
     rects.push({ x, y: top + depth * H, w, node });
     let cx = x;

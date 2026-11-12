@@ -5,7 +5,8 @@ This is the core backend of WeatherTrack Pro application.
 This project is responsible for storing and exposing weather data as well as producing different data analysis.
 
 > The performance audit, the optimizations and their measured impact are documented in
-> [`docs/RAPPORT.md`](docs/RAPPORT.md).
+> [`docs/RAPPORT.md`](docs/RAPPORT.md) (PDF version: `docs/RAPPORT.pdf`, rebuilt with `npm run pdf`,
+> which requires Microsoft Edge or Google Chrome).
 
 ## Usage
 
